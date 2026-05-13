@@ -1,4 +1,4 @@
-# AI Receipt Layer — Memory & Decisions
+# Sworn — Memory & Decisions
 
 ## Phase 1 Gate (MUST PASS BEFORE ANY OTHER WORK)
 

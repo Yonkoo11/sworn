@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 /// @title ReceiptRegistry
-/// @notice Anchors AI Receipt Layer receipts on 0G Chain.
+/// @notice Anchors Sworn receipts on 0G Chain.
 /// @dev One chatIdHash maps to one Anchor, ever. Replay attempts revert.
 contract ReceiptRegistry {
     struct Anchor {

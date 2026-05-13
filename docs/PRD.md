@@ -1,4 +1,4 @@
-# AI Receipt Layer — Product Requirements Document
+# Sworn — Product Requirements Document
 
 **Status:** Draft v0.1 (2026-05-13)
 **Hackathon:** 0G APAC Hackathon, Track 5 Privacy & Sovereign Infrastructure (primary) / Track 1 Agentic Infrastructure (secondary)
@@ -19,12 +19,12 @@ The EU AI Act (compliance phases through 2026) and NIST AI RMF require audit tra
 
 ## 2. What we ship
 
-**AI Receipt Layer** — a drop-in OpenAI-compatible SDK that wraps any LLM call to 0G Compute (TeeML mode), produces a cryptographic receipt anchored on 0G Chain, persisted on 0G Storage, verifiable by any third party.
+**Sworn** — a drop-in OpenAI-compatible SDK that wraps any LLM call to 0G Compute (TeeML mode), produces a cryptographic receipt anchored on 0G Chain, persisted on 0G Storage, verifiable by any third party.
 
 Receipt = `{ chatId, providerAddress, model, promptHash, responseHash, temperature, seed, topP, timestamp, teeSignature, storageRootHash, txHash }`. The receipt is the dispute primitive.
 
 Three components:
-1. **SDK** (`@ai-receipt-layer/sdk` TS). One-line replacement for the OpenAI client. Receipts emit by default; opt-out per call.
+1. **SDK** (`@sworn/sdk` TS). One-line replacement for the OpenAI client. Receipts emit by default; opt-out per call.
 2. **Registry contract** (`ReceiptRegistry.sol`). Anchors each receipt with an on-chain event. Maps `chatIdHash → storageRootHash`. One function: `recordReceipt`.
 3. **Verifier** (web page + CLI). Takes a receipt URL or chatId, pulls from 0G Storage, re-runs `broker.inference.processResponse`, shows verification chain (storage Merkle proof → TEE signature → provider attestation key → contract anchor event).
 
@@ -59,7 +59,7 @@ Hackathon demo focuses on Tier 1; pitches Tier 2 + Tier 3 in the README.
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │ Developer Code                                                       │
-│   import { ReceiptClient } from "@ai-receipt-layer/sdk"             │
+│   import { ReceiptClient } from "@sworn/sdk"             │
 │   const client = new ReceiptClient({ wallet, attest: true })        │
 │   const { content, receiptUrl } =                                   │
 │     await client.chat({ messages, model: "gemma-3-27b" })           │
@@ -220,7 +220,7 @@ Escrow + automatic resolution by re-running verifier. Out of scope for V1.
 ## 8. SDK Surface (V1)
 
 ```typescript
-import { ReceiptClient } from "@ai-receipt-layer/sdk";
+import { ReceiptClient } from "@sworn/sdk";
 import { ethers } from "ethers";
 
 const wallet = new ethers.Wallet(privateKey, provider);
@@ -249,9 +249,9 @@ Single-call API. Drop-in shape mirrors OpenAI's `.chat.completions.create`.
 
 CLI:
 ```bash
-npx @ai-receipt-layer/verify <chatId>
+npx @sworn/verify <chatId>
 # or
-npx @ai-receipt-layer/verify <receiptUrl>
+npx @sworn/verify <receiptUrl>
 ```
 
 Output:
@@ -313,7 +313,7 @@ I will document the answer for each in `ai/memory.md` as I find it. V1 scaffold 
 
 ## 14. Phase 1 Gate (BLOCKING — must pass before any V2 work)
 
-**Core action:** A developer running `npm install @ai-receipt-layer/sdk`, dropping in 5 lines of code, gets back a receipt URL that a third party can verify on the verifier page.
+**Core action:** A developer running `npm install @sworn/sdk`, dropping in 5 lines of code, gets back a receipt URL that a third party can verify on the verifier page.
 
 **Binary test:**
 1. Run the demo chatbot's `npm run send-one-message` script

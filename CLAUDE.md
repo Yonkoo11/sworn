@@ -1,4 +1,4 @@
-# CLAUDE.md — AI Receipt Layer
+# CLAUDE.md — Sworn
 
 ## Phase 1 Gate (READ FIRST EVERY SESSION)
 

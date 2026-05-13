@@ -1,4 +1,4 @@
-# Fix Plan — AI Receipt Layer
+# Fix Plan — Sworn
 
 Atomic tasks with binary success criteria. Each task is independently verifiable; finished only when its acceptance test passes.
 

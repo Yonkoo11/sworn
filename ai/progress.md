@@ -1,4 +1,4 @@
-# Progress Log — AI Receipt Layer
+# Progress Log — Sworn
 
 ## Session 2026-05-13 (builder, autonomous)
 
