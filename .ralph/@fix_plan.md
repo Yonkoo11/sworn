@@ -4,20 +4,19 @@ Atomic tasks with binary success criteria. Each task is independently verifiable
 
 ## Phase 1: Core Receipt Pipeline (BLOCKING — see ai/memory.md Phase 1 Gate)
 
-- [ ] **T1: Foundry project skeleton + ReceiptRegistry.sol**
+- [x] **T1: Foundry project skeleton + ReceiptRegistry.sol** (commit 74e7581)
   - Files: `contracts/foundry.toml`, `contracts/src/ReceiptRegistry.sol`
-  - Acceptance: `forge build` compiles clean with 0 warnings
-  - Notes: solc 0.8.24, default Foundry profile
+  - Acceptance MET: `forge build` clean, 0 warnings
 
-- [ ] **T2: ReceiptRegistry tests (happy path + replay + zero-hash rejection)**
+- [x] **T2: ReceiptRegistry tests (happy path + replay + zero-hash rejection)** (commit a5a7fcf)
   - Files: `contracts/test/ReceiptRegistry.t.sol`
-  - Acceptance: `forge test -vv` shows 4+ tests pass, gas reported
-  - Coverage: anchor records correctly, replay reverts with `AlreadyAnchored`, event emitted with all 6 args, `isAnchored` returns true after record
+  - Acceptance MET: 10 tests pass (including 256-run fuzz), gas reported
 
-- [ ] **T3: Deploy ReceiptRegistry to Galileo testnet**
-  - Files: `contracts/script/Deploy.s.sol`, `contracts/.env.example`
-  - Acceptance: contract address recorded in `contracts/deployments/galileo.json`, Explorer link in `ai/memory.md`
+- [ ] **T3: Deploy ReceiptRegistry to Galileo testnet** (BLOCKED — no funded PRIVATE_KEY)
+  - Files: `contracts/script/Deploy.s.sol`, `contracts/.env.example` (PREPPED, commit b68eced)
+  - Acceptance: contract address recorded in `contracts/deployments/16601.json`, Explorer link in `ai/memory.md`
   - Notes: Galileo chain 16601, RPC `https://evmrpc-testnet.0g.ai`, need 0G testnet tokens
+  - BLOCKER: `PRIVATE_KEY` env var not set. User must fund a Galileo wallet from 0G faucet, then `export PRIVATE_KEY=0x...` and re-run the builder.
 
 - [ ] **T4: SDK package.json + tsconfig + types**
   - Files: `sdk-ts/package.json`, `sdk-ts/tsconfig.json`, `sdk-ts/src/types.ts`
@@ -66,4 +65,7 @@ Atomic tasks with binary success criteria. Each task is independently verifiable
 - [ ] **T18: Post-submission DATABASE.csv + outcome row update**
 
 ## Completed
-(builder fills in)
+
+- **T1** (commit 74e7581) — Foundry scaffold + ReceiptRegistry.sol; `forge build` clean
+- **T2** (commit a5a7fcf) — 10 contract tests pass (happy path, event, replay x2, three zero-value reverts, getAnchor, isAnchored, fuzz)
+- **T3 prep** (commit b68eced) — Deploy script + `.env.example` ready; awaiting funded key
