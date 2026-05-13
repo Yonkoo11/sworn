@@ -1,0 +1,39 @@
+{
+  "name": "@sworn/sdk",
+  "version": "0.1.0",
+  "description": "Drop-in OpenAI-shaped SDK that emits cryptographically sworn receipts via 0G Compute / Storage / Chain.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "sworn-verify": "bin/verify.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "ethers": "^6.13.4",
+    "openai": "^4.77.0"
+  },
+  "optionalDependencies": {
+    "@0glabs/0g-serving-broker": "^0.4.0",
+    "@0glabs/0g-ts-sdk": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.4.5",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md"
+  ]
+}
