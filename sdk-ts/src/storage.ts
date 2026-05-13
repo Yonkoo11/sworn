@@ -67,8 +67,12 @@ export function generateEncryptionKey(): string {
 export class MockStorage implements StorageLike {
   private dir: string;
 
-  constructor(dir: string = MOCK_STORAGE_DIR) {
-    this.dir = dir;
+  constructor(dir?: string) {
+    // Resolution order:
+    //   1. explicit ctor arg
+    //   2. SWORN_STORAGE_DIR env (lets the CLI + the test process share blobs)
+    //   3. /tmp/sworn-mock-storage (default)
+    this.dir = dir ?? process.env.SWORN_STORAGE_DIR ?? MOCK_STORAGE_DIR;
     if (!existsSync(this.dir)) {
       mkdirSync(this.dir, { recursive: true });
     }

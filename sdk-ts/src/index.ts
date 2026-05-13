@@ -43,3 +43,12 @@ export {
   downloadAndDecrypt,
 } from "./storage.js";
 export { ReceiptClient } from "./client.js";
+export {
+  RegistryAnchor,
+  RECEIPT_REGISTRY_ABI,
+  loadRegistryAbi,
+  type RegistryAnchorOptions,
+  type AnchorInput,
+  type AnchorResult,
+  type AnchorRecord,
+} from "./anchor.js";
