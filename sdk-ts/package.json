@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "ethers": "^6.13.4",
-    "openai": "^4.77.0"
+    "openai": "^4.77.0",
+    "picocolors": "^1.1.1"
   },
   "optionalDependencies": {
     "@0glabs/0g-serving-broker": "^0.4.0",

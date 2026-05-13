@@ -31,11 +31,10 @@
  * still reflects checks 1+2.
  */
 
-import { JsonRpcProvider } from "ethers";
+import { Contract, JsonRpcProvider, keccak256, toUtf8Bytes } from "ethers";
 import type { Receipt, StorageLike } from "./types.js";
-import { RegistryAnchor } from "./anchor.js";
-import { createStorage } from "./storage.js";
-import { aesDecrypt } from "./storage.js";
+import { loadRegistryAbi, type AnchorRecord } from "./anchor.js";
+import { aesDecrypt, createStorage } from "./storage.js";
 import { modelHash as modelHashFn } from "./hashing.js";
 import { createHash } from "node:crypto";
 
@@ -75,14 +74,8 @@ export function chatIdFromInput(input: string): string {
   return input;
 }
 
-/**
- * keccak256 of a UTF-8 string, without pulling all of ethers into the
- * verifier's hot path. Falls back to ethers if available so the result matches
- * the SDK's hashing module byte-for-byte.
- */
+/** keccak256 of a UTF-8 string. Matches the SDK's hashing module exactly. */
 function keccak256OfChatId(chatId: string): string {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { keccak256, toUtf8Bytes } = require("ethers");
   return keccak256(toUtf8Bytes(chatId));
 }
 
@@ -117,14 +110,11 @@ export class Verifier {
     // 1. Anchor exists on-chain.
     // -----------------------------------------------------------------
     const provider = new JsonRpcProvider(this.rpcUrl);
-    let anchorRecord: Awaited<ReturnType<RegistryAnchor["getAnchor"]>> = null;
+    let anchorRecord: AnchorRecord | null = null;
     try {
-      // We construct a read-only "wallet" view by hand: RegistryAnchor's
-      // constructor demands a Wallet, but for read paths we only need a
-      // Contract bound to a provider. So we use ethers Contract directly
-      // here rather than RegistryAnchor — that keeps Verifier zero-wallet.
-      const { Contract } = await import("ethers");
-      const { loadRegistryAbi } = await import("./anchor.js");
+      // We use ethers Contract bound to a provider directly here rather than
+      // RegistryAnchor — RegistryAnchor's constructor demands a Wallet, but
+      // verification is read-only. This keeps Verifier zero-wallet by design.
       const contract = new Contract(this.registryAddress, loadRegistryAbi() as any, provider);
       const raw = (await contract.getAnchor(chatIdHash)) as [
         string,
