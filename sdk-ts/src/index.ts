@@ -31,4 +31,15 @@ export {
 } from "./hashing.js";
 
 export { MockBroker, RealBroker, createBroker, brokerBackendFromEnv } from "./broker.js";
+export {
+  MockStorage,
+  RealStorage,
+  createStorage,
+  storageBackendFromEnv,
+  aesEncrypt,
+  aesDecrypt,
+  generateEncryptionKey,
+  encryptAndUpload,
+  downloadAndDecrypt,
+} from "./storage.js";
 export { ReceiptClient } from "./client.js";
