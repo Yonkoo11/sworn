@@ -7,9 +7,10 @@
  * This file is intentionally small. The heavy lifting lives in the three
  * adapters (broker / storage / anchor); ReceiptClient stitches them.
  *
- * - T5 (this file's first pass): wire MockBroker, hash the request/response,
- *   return `{ content, chatId }` so the unit test can assert the call shape.
- * - T8 will extend `chat()` to upload + anchor + return a full ReceiptSummary.
+ * - T5 (first pass): wire MockBroker, hash request/response, return content.
+ * - T8 (this revision): assemble the full Receipt body, encrypt+upload via
+ *   the storage adapter, anchor on-chain via RegistryAnchor, and return a
+ *   ReceiptSummary + fullReceipt.
  */
 
 import type {
@@ -18,7 +19,9 @@ import type {
   ChatOptions,
   ChatResult,
   ProviderMode,
+  Receipt,
   ReceiptClientOptions,
+  ReceiptSummary,
   StorageLike,
 } from "./types.js";
 import {
@@ -28,6 +31,9 @@ import {
   responseHash as responseHashFn,
 } from "./hashing.js";
 import { createBroker } from "./broker.js";
+import { createStorage, encryptAndUpload } from "./storage.js";
+import { RegistryAnchor } from "./anchor.js";
+import { JsonRpcProvider } from "ethers";
 
 /** Default OpenAI-like temperature/topP if the caller omits them. */
 const DEFAULT_TEMPERATURE = 1.0;
@@ -46,18 +52,25 @@ function assertTeeMLMode(mode: ProviderMode): void {
   }
 }
 
+/** V1 receipt URI scheme. Web UI rewrites this to an https URL later. */
+export function receiptUrlForChatId(chatId: string): string {
+  return `sworn://r/${chatId}`;
+}
+
 /**
- * Internal handle so T8 can compose chat() out of broker + storage + anchor.
+ * Internal handle composing chat() out of broker + storage + anchor.
  * The public surface only exposes `chat()` itself.
  */
 export class ReceiptClient {
   private readonly opts: ReceiptClientOptions;
   private readonly broker: BrokerLike;
-  // Wired in T8 (storage upload + anchor). Underscored so tsc treats it as
-  // intentionally-pending without disabling unused-locals globally.
-  protected readonly _storage?: StorageLike;
+  protected readonly _storage: StorageLike;
+  protected readonly _anchor?: RegistryAnchor;
 
-  constructor(opts: ReceiptClientOptions, deps?: { broker?: BrokerLike; storage?: StorageLike }) {
+  constructor(
+    opts: ReceiptClientOptions,
+    deps?: { broker?: BrokerLike; storage?: StorageLike; anchor?: RegistryAnchor },
+  ) {
     this.opts = opts;
     this.broker =
       deps?.broker ??
@@ -65,19 +78,170 @@ export class ReceiptClient {
         backend: opts.brokerBackend,
         wallet: opts.wallet,
       });
-    this._storage = deps?.storage;
+    this._storage =
+      deps?.storage ??
+      createStorage({
+        backend: opts.storageBackend,
+        wallet: opts.wallet,
+      });
+    // The anchor is only constructible when we know the RPC + registry. The
+    // tests inject one directly; in real use the caller passes wallet+registry
+    // and we wire it from opts. The `opts.provider` already carries an RPC.
+    if (deps?.anchor) {
+      this._anchor = deps.anchor;
+    } else if (opts.registry && opts.wallet) {
+      const rpcUrl =
+        (opts.provider as unknown as { _getConnection?: () => { url: string } })
+          ?._getConnection?.()?.url ??
+        process.env.SWORN_RPC_URL ??
+        "";
+      if (rpcUrl) {
+        this._anchor = new RegistryAnchor({
+          rpcUrl,
+          registryAddress: opts.registry,
+          wallet: opts.wallet,
+        });
+      }
+    }
   }
 
   /**
-   * Run a chat completion and (in T8) emit a receipt.
+   * Run a chat completion and (if attest is on, which is the V1 default) emit
+   * a receipt anchored on-chain with the body stored encrypted on 0G Storage.
    *
-   * For T5 the return shape is `{ content }` plus an internal hash bundle
-   * exposed via `chatRaw` for tests. T8 will wire the full `receipt`/
-   * `fullReceipt` fields.
+   * Returns `{ content }` only when `attest=false`. Otherwise the full
+   * `{ content, receipt, fullReceipt }` triple — receipt is the small public
+   * summary, fullReceipt is the §6 schema body.
    */
   async chat(opts: ChatOptions): Promise<ChatResult> {
-    const result = await this.chatRaw(opts);
-    return { content: result.content };
+    const raw = await this.chatRaw(opts);
+    // Opt-in: a caller must explicitly set `attest: true` either at construction
+    // (`new ReceiptClient({ attest: true, ... })`) or per-call. This avoids
+    // surprise gas+storage charges on a vanilla `chat()` call. The PRD §8
+    // example sets `attest: true` at construction — same shape as here.
+    const attest = opts.attest ?? this.opts.attest ?? false;
+    if (!attest) {
+      return { content: raw.content };
+    }
+    if (!this._anchor) {
+      throw new Error(
+        "chat: attest=true requires a configured registry+wallet (or an injected anchor)",
+      );
+    }
+
+    const encryptionMode = this.opts.receiptEncryption ?? "sealed";
+    const sealed = encryptionMode === "sealed";
+    if (sealed && !this.opts.encryptionKey) {
+      throw new Error(
+        "chat: receiptEncryption=sealed requires an encryptionKey (32-byte hex). " +
+          "Pass `encryptionKey` to ReceiptClient or set receiptEncryption: \"public\".",
+      );
+    }
+
+    // Step 1: pre-compute the receipt body WITHOUT storage.rootHash / anchor
+    // fields, then JSON, encrypt, upload to get rootHash. We then anchor that
+    // rootHash on-chain. Finally we fold tx/block info back into the receipt
+    // body returned to the caller. The body persisted on storage is the
+    // pre-anchor view (it doesn't know its own txHash yet — which is normal
+    // for any commit-then-anchor pipeline).
+    const bodyForStorage: Omit<Receipt, "anchor"> & { anchor?: undefined } = {
+      version: 1,
+      chatId: raw.chatId,
+      chatIdHash: raw.chatIdHash,
+      provider: {
+        address: this.opts.providerAddress,
+        mode: "TeeML",
+        pubkeySnapshot: raw.pubkeySnapshot,
+      },
+      model: raw.model,
+      request: {
+        promptHash: raw.promptHash,
+        temperature: raw.temperature,
+        seed: raw.seed,
+        topP: raw.topP,
+        messageCount: raw.messages.length,
+      },
+      response: {
+        contentHash: raw.responseHash,
+        finishReason: raw.finishReason,
+        promptTokens: raw.promptTokens,
+        completionTokens: raw.completionTokens,
+      },
+      attestation: {
+        teeSignature: raw.teeSignature,
+        processResponseResult: raw.processResponseResult,
+      },
+      storage: {
+        // Filled below after upload; kept as a placeholder so JSON shape is
+        // stable for hashing tools that pre-validate.
+        rootHash: "0x" + "0".repeat(64),
+        encrypted: sealed,
+        encryptionScheme: sealed ? "AES-256-CTR" : undefined,
+      },
+      issuer: this.opts.wallet
+        ? {
+            address: this.opts.wallet.address,
+            label: this.opts.issuerLabel,
+          }
+        : undefined,
+    };
+
+    // Self-reference: the rootHash inside the body would be circular, so we
+    // upload the body WITH a zero placeholder, then fold the real rootHash
+    // into the in-memory copy returned to the caller. The verifier knows the
+    // canonical authority for rootHash is the on-chain anchor, not the body.
+    const serialised = JSON.stringify(bodyForStorage);
+    const { rootHash } = await encryptAndUpload(this._storage, serialised, {
+      encrypted: sealed,
+      keyHex: this.opts.encryptionKey,
+    });
+
+    // Step 2: anchor on-chain.
+    const anchorResult = await this._anchor.anchor({
+      chatIdHash: raw.chatIdHash,
+      storageRootHash: rootHash,
+      providerAddress: this.opts.providerAddress,
+      modelHash: raw.modelHash,
+    });
+
+    // Step 3: assemble the returned receipt — the in-memory body now has the
+    // real rootHash + anchor fields filled in.
+    const fullReceipt: Receipt = {
+      ...(bodyForStorage as Omit<Receipt, "anchor">),
+      storage: {
+        rootHash,
+        encrypted: sealed,
+        encryptionScheme: sealed ? "AES-256-CTR" : undefined,
+      },
+      anchor: {
+        chainId: await this.chainId(),
+        txHash: anchorResult.txHash,
+        blockNumber: anchorResult.blockNumber,
+        blockTimestamp: anchorResult.blockTimestamp,
+      },
+    };
+
+    const receipt: ReceiptSummary = {
+      url: receiptUrlForChatId(raw.chatId),
+      chatId: raw.chatId,
+      rootHash,
+      txHash: anchorResult.txHash,
+      blockNumber: anchorResult.blockNumber,
+    };
+
+    return { content: raw.content, receipt, fullReceipt };
+  }
+
+  /** Try to read chainId off the wallet provider; default to 0 if not wired. */
+  private async chainId(): Promise<number> {
+    const provider = this.opts.wallet?.provider ?? this.opts.provider;
+    if (!provider) return 0;
+    try {
+      const net = await (provider as JsonRpcProvider).getNetwork();
+      return Number(net.chainId);
+    } catch {
+      return 0;
+    }
   }
 
   /**

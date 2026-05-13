@@ -38,9 +38,9 @@ Atomic tasks with binary success criteria. Each task is independently verifiable
   - Acceptance: integration test calls `recordReceipt`, transaction succeeds, `ReceiptIssued` event observed in receipt
   - Notes: ABI from forge artifacts
 
-- [ ] **T8: SDK end-to-end ReceiptClient.chat() with attest=true**
-  - Files: glue in `sdk-ts/src/client.ts`
-  - Acceptance: one-call test: `client.chat({ messages, model })` returns `{ content, receipt: { url, chatId, rootHash, txHash } }`; receipt validates by re-pulling
+- [x] **T8: SDK end-to-end ReceiptClient.chat() with attest=true**
+  - Files: `sdk-ts/src/client.ts`, `sdk-ts/src/verifier.ts`, `sdk-ts/test/e2e.test.ts`
+  - Acceptance MET: 3 e2e tests pass — happy path, corrupt-blob negative, no-wallet verifier. Receipt schema printed in stdout matches PRD §6 field-for-field.
 
 - [ ] **T9: Verifier CLI**
   - Files: `sdk-ts/src/verifier.ts`, `sdk-ts/bin/verify.ts`

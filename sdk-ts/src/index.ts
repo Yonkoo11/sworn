@@ -42,7 +42,14 @@ export {
   encryptAndUpload,
   downloadAndDecrypt,
 } from "./storage.js";
-export { ReceiptClient } from "./client.js";
+export { ReceiptClient, receiptUrlForChatId } from "./client.js";
+export {
+  Verifier,
+  chatIdFromInput,
+  type VerifyCheck,
+  type VerifyResult,
+  type VerifierOptions,
+} from "./verifier.js";
 export {
   RegistryAnchor,
   RECEIPT_REGISTRY_ABI,
