@@ -10,8 +10,7 @@
  * the verifier flow be exercised offline.
  */
 
-import { createHash, createSign } from "node:crypto";
-import { generateKeyPairSync, type KeyObject } from "node:crypto";
+import { createHash, type KeyObject } from "node:crypto";
 import type {
   BrokerLike,
   BrokerChatResponse,
@@ -84,14 +83,14 @@ function deterministicChatId(opts: {
  * hashing + e2e tests have something realistic to consume.
  */
 export class MockBroker implements BrokerLike {
-  private providerAddress: string;
+  private readonly defaultProviderAddress: string;
 
   constructor(providerAddress?: string) {
-    this.providerAddress = providerAddress ?? MOCK_PROVIDER_ADDRESS_DEFAULT;
+    this.defaultProviderAddress = providerAddress ?? MOCK_PROVIDER_ADDRESS_DEFAULT;
   }
 
   async chat(opts: {
-    providerAddress: string;
+    providerAddress?: string;
     model: string;
     messages: ChatMessage[];
     temperature: number;
@@ -99,7 +98,8 @@ export class MockBroker implements BrokerLike {
     seed?: number;
     maxTokens?: number;
   }): Promise<BrokerChatResponse> {
-    if (!opts.providerAddress) {
+    const providerAddress = opts.providerAddress ?? this.defaultProviderAddress;
+    if (!providerAddress) {
       throw new Error("MockBroker: providerAddress is required");
     }
     if (!opts.messages?.length) {
@@ -109,7 +109,7 @@ export class MockBroker implements BrokerLike {
       throw new Error("MockBroker: model is required");
     }
 
-    const chatId = deterministicChatId(opts);
+    const chatId = deterministicChatId({ ...opts, providerAddress });
 
     // Canned reply that includes the last user turn so the e2e test can
     // assert content flow without needing a live LLM.
@@ -117,16 +117,11 @@ export class MockBroker implements BrokerLike {
     const userTurn = lastUserMessage?.content ?? "";
     const content = `[mock:${opts.model}] You said: ${userTurn}`;
 
-    // Sign chatId || content with the fixed test keypair.
+    // Mock signature: ed25519 with createSign isn't supported in node:crypto,
+    // so derive a deterministic, labelled-mock signature as
+    // sha256(privateKey-der || chatId || content). Reproducible across runs,
+    // never confused with a real TEE signature thanks to the "0xMOCK" prefix.
     const { privateKey, publicKeyHex } = getMockKeypair();
-    const signer = createSign("SHA256");
-    signer.update(`${chatId}|${content}`);
-    signer.end();
-    // ed25519 keys do not work with createSign API; fall back to a sha256-HMAC-style
-    // deterministic signature using node's sign() on the KeyObject when supported.
-    // To keep this dependency-free and deterministic, derive signature as
-    // sha256(privateKey-der || chatId || content). That's not cryptographic but is
-    // reproducible and unambiguously labelled as the mock signature.
     const derBytes = privateKey.export({ format: "der", type: "pkcs8" }) as Buffer;
     const sigHex = createHash("sha256")
       .update(derBytes)

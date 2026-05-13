@@ -53,9 +53,9 @@ function assertTeeMLMode(mode: ProviderMode): void {
 export class ReceiptClient {
   private readonly opts: ReceiptClientOptions;
   private readonly broker: BrokerLike;
-  // T8 will set these. Declared here so T8 doesn't have to change the class shape.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private readonly storage?: StorageLike;
+  // Wired in T8 (storage upload + anchor). Underscored so tsc treats it as
+  // intentionally-pending without disabling unused-locals globally.
+  protected readonly _storage?: StorageLike;
 
   constructor(opts: ReceiptClientOptions, deps?: { broker?: BrokerLike; storage?: StorageLike }) {
     this.opts = opts;
@@ -65,7 +65,7 @@ export class ReceiptClient {
         backend: opts.brokerBackend,
         wallet: opts.wallet,
       });
-    this.storage = deps?.storage;
+    this._storage = deps?.storage;
   }
 
   /**
