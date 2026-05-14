@@ -10,6 +10,23 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // SPA fallback restore. 404.html rewrote a deep path to "?p=/<path>";
+      // here we restore it via history.replaceState before React boots so
+      // BrowserRouter sees the intended URL. Pattern: rafgraph/spa-github-pages
+      (function () {
+        var l = window.location;
+        if (l.search && l.search.indexOf('p=/') >= 0) {
+          var q = l.search.slice(1).split('&').reduce(function (acc, kv) {
+            var i = kv.indexOf('=');
+            acc[kv.slice(0, i)] = kv.slice(i + 1).replace(/~and~/g, '&');
+            return acc;
+          }, {});
+          var restored = (q.p || '') + (q.q ? '?' + q.q : '') + l.hash;
+          history.replaceState(null, '', l.pathname.replace(/\/$/, '') + restored);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
