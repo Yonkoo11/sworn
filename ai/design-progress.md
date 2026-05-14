@@ -32,3 +32,18 @@ dna_codes: [DNA-SourceSerif-NavyOxblood-LedgerColumn-StampPulse-PaperGrain, DNA-
 
 phase_3: completed
 selected: hybrid — Proposal 3 base + (P2 live anchors stream on chatbot home) + (P2 "PROOF" chip treatment for independence callout) + (P1 "FILED · YYYY-MM-DD" stamp aesthetic on verifier case-file card). Drop P1 wax seal, P1 rotated affidavit card, P2 Solana green (use P3 teal), P2 dense two-column verifier body (keep P3 single column).
+
+phase_4: completed
+audit_result: pass
+issues_fixed: TS strict warnings (unused modelHashFn / MOCK_KEY / Receipt), browser bundle (chatIdFromInput inlined), 11px non-uppercase label bumped to 12, focus rings paired with box-shadow on global focus-visible
+
+phase_5: completed
+qa_result: APPROVED
+qa_notes:
+  - banned words: clean
+  - cubic-bezier(0.23, 1, 0.32, 1) Emil easing used
+  - touch targets >= 44px verified
+  - prefers-reduced-motion respected in both apps
+  - outline:none paired with box-shadow focus ring on global focus-visible + accent border replacement on inputs
+  - liveness: teal-soft 0.1 + radial gradient 0.1 on hero + brand glow 0.22 + box-shadow shadows 4-tier
+  - all 39 SDK tests still green

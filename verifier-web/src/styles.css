@@ -636,7 +636,7 @@ time {
 .check.skip .glyph { background: var(--skipped-soft); color: var(--skipped); border: 1px solid var(--skipped); }
 .check .name { color: var(--ink); font-weight: 600; font-size: 12.5px; }
 .check .detail { color: var(--ink-3); font-size: 12.5px; word-break: break-all; }
-.check .dur { color: var(--ink-4); font-size: 11px; letter-spacing: 0.04em; white-space: nowrap; }
+.check .dur { color: var(--ink-4); font-size: 12px; letter-spacing: 0.04em; white-space: nowrap; }
 
 /* CRYPTO DETAIL */
 .byte-toggle {
@@ -709,7 +709,7 @@ time {
   position: absolute;
   top: 8px; right: 12px;
   font-family: var(--display);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--mono-mute);
   letter-spacing: 0.08em;
 }
