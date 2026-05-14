@@ -3,10 +3,10 @@ import { AnchorStream } from "./components/AnchorStream";
 import { ChatPanel } from "./components/ChatPanel";
 import { buildAnchorRows } from "../lib/mock-anchors";
 
-export const dynamic = "force-dynamic";
-
+// Static export: the page is fully static. The "current-minute" seed is
+// generated once at build time and the live ticker (client component) takes
+// over for animated freshness once hydrated.
 export default function Home() {
-  // Server-rendered initial stream — deterministic for current minute.
   const now = Date.now();
   const seed = Math.floor(now / 60_000);
   const initialRows = buildAnchorRows({ count: 6, seed, nowMs: now });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { runMockChat } from "../../lib/chat-mock";
 
 interface ReceiptSummary {
   url: string;
@@ -76,16 +77,9 @@ export function ChatPanel() {
       setPending(true);
 
       try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ message: text }),
-        });
-        const json = (await res.json()) as {
-          content: string;
-          receipt?: ReceiptSummary;
-          degraded?: boolean;
-        };
+        // Static build: chat runs entirely in-browser using ethers + Web Crypto.
+        // Receipt shape matches docs/PRD.md §6; chatId is deterministic-from-input.
+        const json = await runMockChat(text);
         const botMsg: ChatMessage = {
           id: `b-${Date.now()}`,
           role: "assistant",

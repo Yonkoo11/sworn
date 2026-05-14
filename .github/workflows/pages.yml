@@ -1,6 +1,6 @@
-# Deploys verifier-web (static Vite SPA) to GitHub Pages at
-# https://yonkoo11.github.io/sworn/. No untrusted GitHub event inputs are used,
-# so command injection via github.event.* is not a concern in this workflow.
+# Builds verifier-web (root /) and demo-chatbot (/demo/) static, deploys to
+# GitHub Pages at https://yonkoo11.github.io/sworn/. No untrusted GitHub event
+# inputs are used, so command injection via github.event.* is not in scope.
 name: Deploy to GitHub Pages
 
 on:
@@ -20,6 +20,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_VERIFIER_URL: https://yonkoo11.github.io/sworn
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -31,15 +33,18 @@ jobs:
           cache: pnpm
       - name: Install workspace deps
         run: pnpm install --no-frozen-lockfile
-      - name: Build SDK (verifier-web pulls types from it)
+      - name: Build SDK
         run: pnpm --filter '@sworn/sdk' build
-      - name: Build verifier-web
+      - name: Build verifier-web (root)
         run: pnpm --filter verifier-web build
+      - name: Build demo-chatbot (static export under /demo/)
+        run: pnpm --filter demo-chatbot build
       - name: Stage _site
         run: |
-          mkdir -p _site
+          mkdir -p _site _site/demo
           cp -r verifier-web/dist/. _site/
-          ls _site
+          cp -r demo-chatbot/out/. _site/demo/
+          ls -la _site _site/demo
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
