@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AcmeRefunds Bot — Sworn demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  /* chatbot-only layout overrides */
+  body.paper { min-height: 100vh; }
+  .standalone {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+  }
+  .standalone .docket { margin-bottom: 22px; }
+  .standalone h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(32px, 4vw, 44px);
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .standalone .deck {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin: 0 0 36px;
+    max-width: 58ch;
+    line-height: 1.55;
+  }
+  .precedent {
+    border-left: 3px solid var(--oxblood);
+    background: var(--oxblood-soft);
+    padding: 14px 16px;
+    margin: 0 0 36px;
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink);
+    border-radius: 0 var(--r-2) var(--r-2) 0;
+  }
+  .precedent em { color: var(--ink-soft); }
+</style>
+</head>
+<body class="paper">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="mark">
+        <span class="seal" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="38" height="38">
+            <circle cx="32" cy="32" r="29" fill="none" stroke="#1B2A4E" stroke-width="1.2"/>
+            <circle cx="32" cy="32" r="24" fill="none" stroke="#1B2A4E" stroke-width="0.6" stroke-dasharray="2 3"/>
+            <text x="32" y="36" text-anchor="middle" font-family="Source Serif 4" font-size="13" font-weight="600" fill="#1B2A4E" letter-spacing="0.05em">SWN</text>
+          </svg>
+        </span>
+        <div class="wordmark">
+          <span class="brand">Sworn</span>
+          <span class="vol">AcmeRefunds Bot · live demo</span>
+        </div>
+      </div>
+      <nav class="topnav">
+        <a href="index.html">Overview</a>
+        <a href="verifier.html">Verifier</a>
+        <a href="index.html" class="cta-quiet">Back to showcase →</a>
+      </nav>
+    </div>
+    <div class="masthead-rule"></div>
+  </header>
+
+  <main class="standalone">
+    <p class="docket">Surface A · Customer-service chatbot demo</p>
+    <h1>Every reply produces a receipt.</h1>
+    <p class="deck">This is the AcmeRefunds Bot. Ask it a question; the answer comes with a notarised receipt. The receipt link is the entire dispute primitive: anyone, anywhere, can verify what the agent said.</p>
+
+    <div class="precedent">
+      <strong>Precedent:</strong> <em>Moffatt v. Air Canada</em>, 2024 BCCRT 149. The tribunal held that a customer-service chatbot is not a separate entity; what it says is a corporate statement, and the company is liable for it.
+    </div>
+
+    <div class="chat-shell" role="region" aria-label="AcmeRefunds Bot chat">
+      <header class="chat-toolbar">
+        <span class="chat-title">
+          <span class="chat-favicon" aria-hidden="true"></span>
+          AcmeRefunds Bot · v3
+        </span>
+        <span class="chat-meta">Sealed Inference · TeeML · Gemma 3 27B</span>
+      </header>
+
+      <div class="chat-thread" id="thread">
+        <article class="msg msg-user">
+          <header class="msg-hd"><span class="who">You</span><time>10:42</time></header>
+          <p class="msg-body">What is your refund policy for damaged goods?</p>
+        </article>
+
+        <article class="msg msg-bot">
+          <header class="msg-hd"><span class="who">AcmeRefunds Bot</span><time>10:42</time></header>
+          <p class="msg-body">
+            If a product arrives damaged, you may return it within 30 days for a full refund or a free replacement at our cost. Send a photo of the damaged item to support@acmerefunds.example within 7 days of delivery; we&rsquo;ll issue a prepaid return label and refund the original payment method within 5 business days of receipt.
+          </p>
+          <footer class="msg-foot">
+            <a class="receipt-pill" href="verifier.html">
+              <span class="seal-mini" aria-hidden="true"></span>
+              <span class="pill-label">Receipt</span>
+              <span class="pill-id">9a4f8d2b…2c3d</span>
+              <span class="pill-arrow" aria-hidden="true">→</span>
+            </a>
+            <span class="micro">Anchored 2 sec ago · block 1,247,893 · 0G Chain</span>
+          </footer>
+        </article>
+
+        <article class="msg msg-typing" id="typing" hidden>
+          <header class="msg-hd"><span class="who">AcmeRefunds Bot</span><time>now</time></header>
+          <p class="msg-body"><span class="typing-dots"><span></span><span></span><span></span></span> drafting under sealed inference&hellip;</p>
+        </article>
+      </div>
+
+      <form class="chat-input" onsubmit="event.preventDefault(); fakeSend();">
+        <label for="composer" class="visually-hidden">Ask the bot a question</label>
+        <input id="composer" type="text" autocomplete="off" placeholder="Ask the bot a question and watch a receipt appear…" />
+        <button type="submit" class="btn-ink-sm">Send</button>
+      </form>
+
+      <footer class="chat-sub">
+        <span>Every reply produces a receipt. The receipt verifies even if Sworn disappears tomorrow.</span>
+        <a href="verifier.html">Try Sworn →</a>
+      </footer>
+    </div>
+  </main>
+
+  <script src="chat.js"></script>
+</body>
+</html>

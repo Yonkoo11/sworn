@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AcmeRefunds Bot — Sworn demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .standalone {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  .standalone h1 {
+    font-size: clamp(28px, 3.4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+  .standalone .deck { font-size: 15px; color: var(--ink-2); max-width: 56ch; margin: 0 0 24px; line-height: 1.55; }
+</style>
+</head>
+<body class="eng">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-block">
+        <span class="brand-mark">SWN</span>
+        <div class="brand-text">
+          <span class="brand-name">Sworn</span>
+          <span class="brand-sub">/acmerefunds-bot · demo</span>
+        </div>
+      </div>
+      <nav class="topnav">
+        <a href="index.html">Overview</a>
+        <a href="verifier.html">Verifier</a>
+        <a href="index.html">Back to showcase</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="standalone">
+    <span class="tagline" style="margin-bottom: 18px;"><span class="tagline-dot"></span>Surface A · Customer-service chatbot demo</span>
+    <h1>Every reply produces a receipt.</h1>
+    <p class="deck">Ask the AcmeRefunds Bot a question. The pill under each reply is a TEE-signed receipt anyone can re-verify from 0G Chain + 0G Storage alone.</p>
+
+    <div class="precedent-strip" style="margin-bottom: 28px;">
+      <span class="case-no">2024 BCCRT 149</span>
+      <p class="case-text"><strong>Moffatt v. Air Canada</strong>. A tribunal ordered the airline to honour a refund policy invented by its customer-service bot. The bot is not a separate entity; what it says is a corporate statement.</p>
+    </div>
+
+    <div class="chat-shell" role="region" aria-label="AcmeRefunds Bot">
+      <header class="chat-tab">
+        <span class="left">
+          <span class="dot"></span>
+          <span class="name">AcmeRefunds Bot</span>
+        </span>
+        <span class="right">TeeML · gemma-3-27b-it · sealed</span>
+      </header>
+
+      <div class="thread" id="thread">
+        <article class="msg msg-user">
+          <header class="msg-meta"><span class="role">you</span><time>10:42</time></header>
+          <div class="bubble">What is your refund policy for damaged goods?</div>
+        </article>
+
+        <article class="msg msg-bot">
+          <header class="msg-meta"><span class="role">assistant</span><time>10:42</time></header>
+          <div class="bubble">If a product arrives damaged, you may return it within 30 days for a full refund or a free replacement at our cost. Send a photo of the damaged item to support@acmerefunds.example within 7 days of delivery; we&rsquo;ll issue a prepaid return label and refund the original payment method within 5 business days of receipt.</div>
+          <footer class="foot">
+            <a class="receipt-pill" href="verifier.html">
+              <span class="lockicon">S</span>
+              <span>receipt</span>
+              <span class="pill-id">9a4f8d2b…2c3d</span>
+              <span class="pill-arrow">→</span>
+            </a>
+            <span class="micro">anchored 2 sec ago · block 1,247,893 · 0G chain</span>
+          </footer>
+        </article>
+
+        <article class="msg msg-typing" id="typing" hidden>
+          <header class="msg-meta"><span class="role">assistant</span><time>now</time></header>
+          <div class="bubble"><span class="typing"><span></span><span></span><span></span></span>drafting under sealed inference&hellip;</div>
+        </article>
+      </div>
+
+      <form class="composer" onsubmit="event.preventDefault(); fakeSend();">
+        <label for="composer" class="visually-hidden">Ask the bot</label>
+        <input id="composer" type="text" autocomplete="off" placeholder="Ask the bot a question and watch a receipt appear…" />
+        <button class="btn-sm" type="submit">Send</button>
+      </form>
+
+      <footer class="chat-foot">
+        <span>every reply produces a TEE-signed receipt</span>
+        <a href="verifier.html">try sworn →</a>
+      </footer>
+    </div>
+  </main>
+
+  <script src="chat.js"></script>
+</body>
+</html>

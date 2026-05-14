@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sworn verifier · receipt 9a4f8d2b…2c3d</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  body.paper { min-height: 100vh; }
+  .v-page { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+  .v-head { margin-bottom: 28px; }
+  .v-head .docket { margin-bottom: 16px; }
+  .v-head h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(28px, 3.4vw, 38px);
+    letter-spacing: -0.018em;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .v-head .sub {
+    font-family: var(--serif); font-size: 16px; color: var(--ink-soft);
+    max-width: 60ch; line-height: 1.55; margin: 0;
+  }
+</style>
+</head>
+<body class="paper">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="mark">
+        <span class="seal" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="38" height="38">
+            <circle cx="32" cy="32" r="29" fill="none" stroke="#1B2A4E" stroke-width="1.2"/>
+            <circle cx="32" cy="32" r="24" fill="none" stroke="#1B2A4E" stroke-width="0.6" stroke-dasharray="2 3"/>
+            <text x="32" y="36" text-anchor="middle" font-family="Source Serif 4" font-size="13" font-weight="600" fill="#1B2A4E" letter-spacing="0.05em">SWN</text>
+          </svg>
+        </span>
+        <div class="wordmark">
+          <span class="brand">Sworn</span>
+          <span class="vol">Public verifier · r/9a4f8d2b…2c3d</span>
+        </div>
+      </div>
+      <nav class="topnav">
+        <a href="index.html">Overview</a>
+        <a href="chatbot.html">Demo bot</a>
+        <a href="index.html" class="cta-quiet">Back to showcase →</a>
+      </nav>
+    </div>
+    <div class="masthead-rule"></div>
+  </header>
+
+  <main class="v-page">
+    <div class="v-head">
+      <p class="docket">Surface B · Public verifier</p>
+      <h1>Receipt of statement by AI agent</h1>
+      <p class="sub">Anyone with this URL can independently verify what the AcmeRefunds Bot said on 13 May 2026, regardless of whether Sworn, AcmeRefunds, or even the original provider remain online. The page below was reconstructed in your browser from public sources.</p>
+    </div>
+
+    <div class="verifier-shell">
+      <div class="addressbar">
+        <span class="addr-scheme">sworn://r/</span><span class="addr-path">9a4f8d2b-1c3e-4f5a-b6d7-8e9f0a1b2c3d</span>
+      </div>
+
+      <div class="banner banner-verified" role="status" aria-live="polite">
+        <span class="banner-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12.5l5 5 13-13"/></svg>
+        </span>
+        <span class="banner-main">
+          <strong>Verified.</strong> 8 of 9 checks passed; 1 skipped (decryption key not supplied).
+        </span>
+        <span class="banner-when">re-verified <time>3 sec ago</time> · 2026‑05‑13 10:42:08 UTC+01:00</span>
+      </div>
+
+      <aside class="independence">
+        <p class="indep-head">This receipt verifies even if Sworn disappears tomorrow.</p>
+        <p class="indep-body">Re-verifiable from public sources alone: 0G Storage gateway, 0G Chain RPC, TEE provider attestation key. Our servers are not in the trust path. <button class="link-button" onclick="toggleChain()">Show the chain →</button></p>
+        <ol class="chain-list" id="chainList" hidden>
+          <li><span class="ck">anchor.exists</span> ← read <code>getAnchor(chatIdHash)</code> on <code>evmrpc-testnet.0g.ai</code></li>
+          <li><span class="ck">storage.retrievable</span> ← download blob from <code>indexer-storage.0g.ai</code></li>
+          <li><span class="ck">body.teeSignature</span> ← match snapshot pubkey <code>0x04a7…e2c4</code></li>
+          <li><span class="ck">anchor.modelHash</span> ← keccak(<code>gemma-3-27b-it</code>) equals on-chain hash</li>
+        </ol>
+      </aside>
+
+      <section class="ledger-grid">
+        <div class="ledger-row">
+          <p class="ledger-key">Issued</p>
+          <p class="ledger-val">
+            <span class="rel">3 seconds ago</span>
+            <span class="abs">2026‑05‑13T10:42:08+01:00</span>
+          </p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Issuer</p>
+          <p class="ledger-val">AcmeRefunds Bot <span class="muted">·</span> <code class="inline-hash">0xf39F…2266</code></p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Provider</p>
+          <p class="ledger-val"><code class="inline-hash">0x69eB…AE08</code> <span class="muted">·</span> TeeML</p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Model</p>
+          <p class="ledger-val">gemma-3-27b-it</p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Anchor</p>
+          <p class="ledger-val">
+            Block <a href="#" class="ink">1,247,893</a>
+            <span class="muted">·</span> tx
+            <a href="#" class="ink"><code class="inline-hash">0xtxbc91…d3e8b4a7f2</code></a>
+            <span class="muted">·</span> chainId 16601
+          </p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Storage</p>
+          <p class="ledger-val">
+            rootHash
+            <a href="#" class="ink"><code class="inline-hash">0xroot4f8d2b1c3e</code></a>
+            <span class="muted">·</span> AES‑256‑CTR (sealed)
+          </p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Sampling</p>
+          <p class="ledger-val">temperature 1.0 · topP 1.0 · messageCount 1</p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Tokens</p>
+          <p class="ledger-val">18 prompt · 42 completion · finishReason <code class="inline-hash">stop</code></p>
+        </div>
+        <div class="ledger-row">
+          <p class="ledger-key">Seed</p>
+          <p class="ledger-val muted">Not captured</p>
+        </div>
+      </section>
+
+      <section class="checks">
+        <header class="checks-head">
+          <h3>Verification chain</h3>
+          <p class="muted">9 checks · run by your browser against public sources</p>
+        </header>
+        <ol class="checks-list">
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">anchor.exists</span><span class="ck-detail">rootHash=0xroot4f8d… block #1247893</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">storage.retrievable</span><span class="ck-detail">412 B downloaded, rootHash verified</span></li>
+          <li class="ck-skip"><span class="ck-glyph">·</span><span class="ck-name">storage.decrypts</span><span class="ck-detail">sealed; no decryption key supplied</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">body.parses</span><span class="ck-detail">version=1 chatId=9a4f8d2b…</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">body.promptHash</span><span class="ck-detail">0xd4f8…1a3c</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">body.responseHash</span><span class="ck-detail">0x7e2b…9c4f</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">body.teeSignature</span><span class="ck-detail">sig=0x8c4b… pub=0x04a7…</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">body.processResponseResult</span><span class="ck-detail">true at issuance</span></li>
+          <li class="ck-pass"><span class="ck-glyph">✓</span><span class="ck-name">anchor.modelHash</span><span class="ck-detail">model=gemma-3-27b-it</span></li>
+        </ol>
+      </section>
+
+      <details class="byte-toggle" open>
+        <summary>
+          <span>Cryptographic detail · Level 4 · byte-exact values</span>
+          <span class="chev">▾</span>
+        </summary>
+        <div class="byte-grid">
+          <div class="byte-block">
+            <p class="byte-label">request.promptHash · sha256</p>
+            <pre class="byte-code">sha256:d4f8a14b7e02c98f43c1aa6e9b88f0d27c6e4f5a18b27e9d4a1c3eef3211a3c</pre>
+          </div>
+          <div class="byte-block">
+            <p class="byte-label">response.contentHash · sha256</p>
+            <pre class="byte-code">sha256:7e2b9f01ac4d18ce67b27d4a9b5e3c08af40d6d3a7e9f23c1ac2049a3b8de9c4f</pre>
+          </div>
+          <div class="byte-block">
+            <p class="byte-label">attestation.teeSignature · Ed25519</p>
+            <pre class="byte-code">0x8c4b41c2e09ad774a3b51e8f0d44a7b27e9d4c3f1a05b2f3e8c7d9012ab4cd5e6
+   f7012387ac9f0ed821b3c6a4b27d5e8f01029384abcdef0123456789ab2f3e1d</pre>
+          </div>
+          <div class="byte-block">
+            <p class="byte-label">provider.pubkeySnapshot · Ed25519 (snapshot at issuance)</p>
+            <pre class="byte-code">0x04a7c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91de2c4</pre>
+          </div>
+          <div class="byte-block">
+            <p class="byte-label">storage.rootHash · 0G Storage Merkle root</p>
+            <pre class="byte-code">0xroot4f8d2b1c3e  →  linkified to 0G Storage gateway</pre>
+          </div>
+          <div class="byte-block">
+            <p class="byte-label">anchor.txHash · 0G Chain (Galileo, chainId 16601)</p>
+            <pre class="byte-code">0xtxbc91d3e8b4a7f2  →  linkified to 0G Explorer</pre>
+          </div>
+        </div>
+      </details>
+
+      <footer class="ver-foot">
+        <span>Notarised by Sworn. Verifiable by anyone.</span>
+        <a href="index.html">Return to overview →</a>
+      </footer>
+    </div>
+  </main>
+
+  <script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+packages:
+  - "sdk-ts"
+  - "demo-chatbot"
+  - "verifier-web"

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AcmeRefunds Bot — Sworn demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="editorial">
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-glyph"><svg viewBox="0 0 12 12" fill="none"><path d="M3 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="brand-name">Sworn</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html">Overview</a>
+        <a href="verifier.html">Verifier</a>
+        <a href="index.html" class="cta">Back to showcase →</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="border-top: none;">
+      <div class="section-inner">
+        <p class="surface-label">Surface A — Demo</p>
+        <h2 class="section-h">Every reply produces a receipt.</h2>
+        <p class="section-lede">Ask the AcmeRefunds Bot a question. The receipt pill below the reply opens the public verifier; anyone can open it and re-derive proof from 0G Chain + 0G Storage alone.</p>
+
+        <p class="case-cite" style="margin-bottom: 40px;">Citation: <em>Moffatt v. Air Canada</em>, 2024 BCCRT 149 &nbsp;&middot;&nbsp; the tribunal held that what a customer-service chatbot says is a corporate statement.</p>
+
+        <div class="thread-frame">
+          <header class="thread-tab">
+            <span class="name">AcmeRefunds Bot · v3</span>
+            <span>TeeML · gemma-3-27b-it · sealed</span>
+          </header>
+          <div class="thread" id="thread">
+            <article class="msg msg-user">
+              <header class="msg-byline"><span class="who">You</span><time>10:42</time></header>
+              <p class="bubble">What is your refund policy for damaged goods?</p>
+            </article>
+
+            <article class="msg msg-bot">
+              <header class="msg-byline"><span class="who">AcmeRefunds Bot</span><time>10:42</time></header>
+              <p class="bubble">If a product arrives damaged, you may return it within 30 days for a full refund or a free replacement at our cost. Send a photo of the damaged item to support@acmerefunds.example within 7 days of delivery; we&rsquo;ll issue a prepaid return label and refund the original payment method within 5 business days of receipt.</p>
+              <footer class="foot">
+                <a class="receipt-pill" href="verifier.html">
+                  <span class="pill-icon">S</span>
+                  <span class="pill-label">Receipt</span>
+                  <span class="pill-id">9a4f8d2b…2c3d</span>
+                  <span class="pill-arrow">→</span>
+                </a>
+                <span class="micro">Filed 2 sec ago · 0G Chain · block 1,247,893</span>
+              </footer>
+            </article>
+
+            <article class="msg msg-typing" id="typing" hidden>
+              <header class="msg-byline"><span class="who">AcmeRefunds Bot</span><time>now</time></header>
+              <p class="bubble"><span class="typing-dots"><span></span><span></span><span></span></span>drafting under sealed inference&hellip;</p>
+            </article>
+          </div>
+          <form class="composer" onsubmit="event.preventDefault(); fakeSend();">
+            <label for="composer" class="visually-hidden">Ask the bot</label>
+            <input id="composer" type="text" autocomplete="off" placeholder="Ask the bot a question and watch a receipt appear…" />
+            <button class="btn-send" type="submit">Send</button>
+          </form>
+        </div>
+        <p class="thread-caption">Every reply produces a receipt. <a href="verifier.html">Try Sworn →</a></p>
+      </div>
+    </section>
+  </main>
+  <script src="chat.js"></script>
+</body>
+</html>

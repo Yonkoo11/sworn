@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sworn — Engineer's Receipt (combined showcase)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="eng">
+  <a href="#main" class="skip">Skip to main</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-block">
+        <span class="brand-mark" aria-hidden="true">SWN</span>
+        <div class="brand-text">
+          <span class="brand-name">Sworn</span>
+          <span class="brand-sub">/receipt-registry · v1</span>
+        </div>
+      </div>
+      <nav class="topnav">
+        <a href="#chatbot">Demo</a>
+        <a href="#verifier">Verifier</a>
+        <a href="chatbot.html">Open chat</a>
+        <a href="verifier.html">Inspect receipt <span class="key">⌘ K</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="hero-left">
+        <span class="tagline"><span class="tagline-dot"></span>Receipt registry · Galileo testnet · 1,247,893 anchors</span>
+        <h1 class="h1">A cryptographic receipt for every chatbot reply, <em>before</em> the next Air Canada case lands.</h1>
+        <p class="lede">Sworn drops into any OpenAI-shaped chat call and emits a TEE-signed receipt anchored on 0G Chain. The URL is the receipt. Anyone can verify it, indefinitely, without our servers.</p>
+
+        <div class="precedent-strip">
+          <span class="case-no">2024 BCCRT 149</span>
+          <p class="case-text"><strong>Moffatt v. Air Canada</strong>. A tribunal ordered the airline to honour a refund policy invented by its customer-service bot. The bot is not a separate entity; what it says is a corporate statement.</p>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn-primary" href="#chatbot">
+            <span>Run the demo bot</span>
+            <span class="arrow">→</span>
+          </a>
+          <a class="btn-secondary" href="#verifier">
+            <span>Inspect a receipt</span>
+          </a>
+        </div>
+
+        <div class="hero-meta">
+          <span>npm i @sworn/sdk</span>
+          <span class="dot"></span>
+          <span>~6 lines of code</span>
+          <span class="dot"></span>
+          <span>chainId 16601</span>
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div class="stream" aria-label="Live anchor stream from 0G chain">
+          <header class="stream-head">
+            <span class="lbl">recent anchors</span>
+            <span class="count">8 / 1,247,893</span>
+          </header>
+          <div class="stream-body">
+            <div class="stream-row fresh">
+              <span class="ts">10:42:08</span>
+              <span class="chatid">9a4f8d2b…2c3d</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:41:53</span>
+              <span class="chatid">3c81fe0a…a107</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:41:39</span>
+              <span class="chatid">b27d5e8f…41cd</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:41:18</span>
+              <span class="chatid">7e2b9f01…2901</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:41:04</span>
+              <span class="chatid">04a7c91d…e2c4</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:40:51</span>
+              <span class="chatid">f7012387…3e1d</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:40:32</span>
+              <span class="chatid">8c4b41c2…cd5e</span>
+              <span class="badge">verified</span>
+            </div>
+            <div class="stream-row">
+              <span class="ts">10:40:11</span>
+              <span class="chatid">12ab4cd5…6789</span>
+              <span class="badge">verified</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ============ CHATBOT ============ -->
+    <section class="section" id="chatbot">
+      <div class="section-head">
+        <p class="kicker">Surface A · Demo bot</p>
+        <h2 class="section-title">AcmeRefunds Bot</h2>
+        <p class="section-deck">Drop-in OpenAI chat call wrapped in a TEE. The receipt link below each reply is the dispute primitive; paste it anywhere, anyone can re-verify it from public sources alone.</p>
+      </div>
+
+      <div class="chat-shell" role="region" aria-label="AcmeRefunds Bot">
+        <header class="chat-tab">
+          <span class="left">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="name">AcmeRefunds Bot</span>
+          </span>
+          <span class="right">TeeML · gemma-3-27b-it · sealed</span>
+        </header>
+
+        <div class="thread" id="thread">
+          <article class="msg msg-user">
+            <header class="msg-meta">
+              <span class="role">you</span>
+              <time>10:42</time>
+            </header>
+            <div class="bubble">What is your refund policy for damaged goods?</div>
+          </article>
+
+          <article class="msg msg-bot">
+            <header class="msg-meta">
+              <span class="role">assistant</span>
+              <time>10:42</time>
+            </header>
+            <div class="bubble">If a product arrives damaged, you may return it within 30 days for a full refund or a free replacement at our cost. Send a photo of the damaged item to support@acmerefunds.example within 7 days of delivery; we&rsquo;ll issue a prepaid return label and refund the original payment method within 5 business days of receipt.</div>
+            <footer class="foot">
+              <a class="receipt-pill" href="verifier.html" aria-label="Open the receipt for this reply">
+                <span class="lockicon" aria-hidden="true">S</span>
+                <span>receipt</span>
+                <span class="pill-id">9a4f8d2b…2c3d</span>
+                <span class="pill-arrow">→</span>
+              </a>
+              <span class="micro">anchored 2 sec ago · block 1,247,893 · 0G chain</span>
+            </footer>
+          </article>
+
+          <article class="msg msg-typing" id="typing" hidden>
+            <header class="msg-meta">
+              <span class="role">assistant</span>
+              <time>now</time>
+            </header>
+            <div class="bubble"><span class="typing"><span></span><span></span><span></span></span>drafting under sealed inference&hellip;</div>
+          </article>
+        </div>
+
+        <form class="composer" onsubmit="event.preventDefault(); fakeSend();">
+          <label for="composer" class="visually-hidden">Ask the bot</label>
+          <input id="composer" type="text" autocomplete="off" placeholder="Ask the bot a question and watch a receipt appear…" />
+          <button class="btn-sm" type="submit">Send</button>
+        </form>
+
+        <footer class="chat-foot">
+          <span>every reply produces a TEE-signed receipt</span>
+          <a href="chatbot.html">try sworn →</a>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ============ VERIFIER ============ -->
+    <section class="section verifier-section" id="verifier">
+      <div class="section-head">
+        <p class="kicker">Surface B · Public verifier</p>
+        <h2 class="section-title">The URL is the receipt.</h2>
+        <p class="section-deck">Paste a <code>sworn://r/&lt;chatId&gt;</code> URL or look one up by chatIdHash. No upload. Defaults to a readable summary; everything below is byte-exact and re-derivable from 0G Chain + 0G Storage alone.</p>
+      </div>
+
+      <form class="search-card" onsubmit="event.preventDefault();">
+        <select aria-label="Search by">
+          <option>chatId</option>
+          <option>chatIdHash</option>
+          <option>rootHash</option>
+          <option>txHash</option>
+        </select>
+        <input value="9a4f8d2b-1c3e-4f5a-b6d7-8e9f0a1b2c3d" />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="verifier-card">
+
+        <!-- status banner -->
+        <header class="statusbar" role="status">
+          <span class="statusbar-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 12.5l5 5 13-13"/></svg>
+          </span>
+          <span class="statusbar-text">
+            <strong>Verified.</strong>
+            <span class="sub">8 of 9 checks passed · 1 skipped (decryption key not supplied) · all rederived in your browser</span>
+          </span>
+          <span class="statusbar-side">
+            <span class="rel">re-verified 3 sec ago</span>
+            <span>2026‑05‑13T10:42:08+01:00</span>
+          </span>
+        </header>
+
+        <!-- independence -->
+        <div class="independence">
+          <span class="ix">PROOF</span>
+          <div>
+            <p class="head">This receipt verifies even if Sworn disappears tomorrow.</p>
+            <p class="body">Re-verifiable from public sources alone: 0G Storage gateway, 0G Chain RPC, TEE provider attestation key. Our servers are not in the trust path.</p>
+          </div>
+          <button onclick="toggleChain()">Show the chain →</button>
+        </div>
+
+        <div class="chain-show" id="chainShow" hidden>
+          <ol>
+            <li><strong>anchor.exists</strong> ← <code>getAnchor(chatIdHash)</code> on <code>https://evmrpc-testnet.0g.ai</code></li>
+            <li><strong>storage.retrievable</strong> ← <code>GET https://indexer-storage.0g.ai/file?root=0xroot4f…</code></li>
+            <li><strong>body.teeSignature</strong> ← match snapshot pubkey <code>0x04a7…e2c4</code> recorded in receipt body</li>
+            <li><strong>anchor.modelHash</strong> ← keccak256("gemma-3-27b-it") equals on-chain hash</li>
+          </ol>
+        </div>
+
+        <!-- Rekor-style 4-cell metadata strip -->
+        <section class="metastrip">
+          <div class="cell">
+            <p class="lbl">CHATID</p>
+            <p class="val">9a4f8d2b…2c3d</p>
+          </div>
+          <div class="cell">
+            <p class="lbl">CHAIN ID</p>
+            <p class="val">16601 · Galileo</p>
+          </div>
+          <div class="cell">
+            <p class="lbl">BLOCK</p>
+            <p class="val"><a href="#">1,247,893</a></p>
+          </div>
+          <div class="cell">
+            <p class="lbl">INTEGRATED TIME</p>
+            <p class="val timepair">
+              <span class="rel">3 seconds ago</span>
+              <span class="abs">2026‑05‑13T10:42:08+01:00</span>
+            </p>
+          </div>
+        </section>
+
+        <div class="body-grid">
+          <div class="body-main">
+            <h3 class="section-h">Anchor &amp; storage</h3>
+            <div class="kv">
+              <div class="row"><span class="k">chatIdHash</span><span class="v">0xa7c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91de2c4</span></div>
+              <div class="row"><span class="k">txHash</span><span class="v"><a href="#" class="link">0xtxbc91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4</a> <span class="lbl-sans">→ 0G Explorer</span></span></div>
+              <div class="row"><span class="k">storage.rootHash</span><span class="v"><a href="#" class="link">0xroot4f8d2b1c3e4f8d2b1c3e4f8d2b1c3e4f8d2b1c3e4f8d2b1c3e4f8d2b1c3e</a> <span class="lbl-sans">→ 0G Storage gateway</span></span></div>
+              <div class="row"><span class="k">storage.encrypted</span><span class="v">true · AES‑256‑CTR</span></div>
+              <div class="row"><span class="k">provider.address</span><span class="v">0x69eB…AE08</span></div>
+              <div class="row"><span class="k">provider.mode</span><span class="v">TeeML</span></div>
+              <div class="row"><span class="k">issuer.address</span><span class="v">0xf39F…2266</span></div>
+              <div class="row"><span class="k">issuer.label</span><span class="v">AcmeRefunds Bot</span></div>
+            </div>
+
+            <h3 class="section-h">Request</h3>
+            <div class="kv">
+              <div class="row"><span class="k">model</span><span class="v">gemma-3-27b-it</span></div>
+              <div class="row"><span class="k">temperature</span><span class="v">1.0</span></div>
+              <div class="row"><span class="k">topP</span><span class="v">1.0</span></div>
+              <div class="row"><span class="k">seed</span><span class="v muted">Not captured</span></div>
+              <div class="row"><span class="k">messageCount</span><span class="v">1</span></div>
+            </div>
+
+            <h3 class="section-h">Response</h3>
+            <div class="kv">
+              <div class="row"><span class="k">finishReason</span><span class="v">stop</span></div>
+              <div class="row"><span class="k">promptTokens</span><span class="v">18</span></div>
+              <div class="row"><span class="k">completionTokens</span><span class="v">42</span></div>
+            </div>
+
+            <h3 class="section-h">Cryptographic atoms · byte‑exact</h3>
+
+            <p class="codeblock-head"><span>request.promptHash · sha256</span><button class="copy" type="button">copy</button></p>
+            <pre class="codeblock"><span class="cmt">// sha256 of canonicalised messages array</span>
+sha256:<span class="grn">d4f8a14b7e02c98f43c1aa6e9b88f0d27c6e4f5a18b27e9d4a1c3eef3211a3c</span></pre>
+
+            <p class="codeblock-head"><span>response.contentHash · sha256</span><button class="copy" type="button">copy</button></p>
+            <pre class="codeblock"><span class="cmt">// sha256 of completion text</span>
+sha256:<span class="grn">7e2b9f01ac4d18ce67b27d4a9b5e3c08af40d6d3a7e9f23c1ac2049a3b8de9c4f</span></pre>
+
+            <p class="codeblock-head"><span>attestation.teeSignature · Ed25519</span><button class="copy" type="button">copy</button></p>
+            <pre class="codeblock"><span class="cmt">// raw TEE signature returned with response</span>
+<span class="blu">0x8c4b41c2</span>e09ad774a3b51e8f0d44a7b27e9d4c3f1a05b2f3e8c7d9012ab4cd5e6
+f7012387ac9f0ed821b3c6a4b27d5e8f01029384abcdef0123456789ab2f3e1d</pre>
+
+            <p class="codeblock-head"><span>provider.pubkeySnapshot · Ed25519</span><button class="copy" type="button">copy</button></p>
+            <pre class="codeblock"><span class="cmt">// snapshot taken at issuance; survives provider key rotation</span>
+<span class="blu">0x04a7</span>c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91de2c4</pre>
+
+            <h3 class="section-h">Verification chain</h3>
+            <div class="checks" id="checks">
+              <div class="row"><span class="glyph pass">✓</span><span class="name">anchor.exists</span><span class="detail">rootHash=0xroot4f8d… block#1247893</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">storage.retrievable</span><span class="detail">412 B · rootHash verified</span></div>
+              <div class="row skip-row"><span class="glyph skip">·</span><span class="name">storage.decrypts</span><span class="detail">no decryptKey supplied</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">body.parses</span><span class="detail">version=1</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">body.promptHash</span><span class="detail">0xd4f8…1a3c</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">body.responseHash</span><span class="detail">0x7e2b…9c4f</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">body.teeSignature</span><span class="detail">sig=0x8c4b… pub=0x04a7…</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">body.processResponseResult</span><span class="detail">true at issuance</span></div>
+              <div class="row"><span class="glyph pass">✓</span><span class="name">anchor.modelHash</span><span class="detail">model=gemma-3-27b-it</span></div>
+            </div>
+          </div>
+
+          <aside class="body-side">
+            <div class="rail-card">
+              <h4>Public sources used</h4>
+              <p>Your browser hit these endpoints. Nothing flowed through Sworn's servers.</p>
+              <div class="row"><span class="k">RPC</span><span class="v">evmrpc‑testnet.0g.ai</span></div>
+              <div class="row"><span class="k">Storage</span><span class="v">indexer‑storage.0g.ai</span></div>
+              <div class="row"><span class="k">Explorer</span><span class="v">chainscan‑galileo.0g.ai</span></div>
+            </div>
+            <div class="rail-card">
+              <h4>Receipt schema</h4>
+              <div class="row"><span class="k">version</span><span class="v">1</span></div>
+              <div class="row"><span class="k">encryption</span><span class="v">AES‑256‑CTR</span></div>
+              <div class="row"><span class="k">size</span><span class="v">412 B</span></div>
+            </div>
+            <div class="rail-card">
+              <h4>What this proves</h4>
+              <p>Provider <code>0x69eB…AE08</code> running <code>gemma-3-27b-it</code> produced the response committed under <code>0x7e2b…9c4f</code> at <code>2026‑05‑13T10:42:08+01:00</code>, signed by the TEE's snapshot key.</p>
+              <p class="rail-foot">Does NOT prove the response is correct.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COLOPHON ============ -->
+    <section class="colophon">
+      <p>Sworn is a drop-in OpenAI-compatible SDK that wraps any chat call in a TEE, anchors a receipt on 0G Chain, and persists it on 0G Storage. The URL is the artifact.</p>
+      <p class="dna">Direction 2 of 3 · "The Engineer's Receipt" · DNA‑Inter‑SolanaGreen‑DenseGrid‑MicroPulse‑PaperWash</p>
+    </section>
+
+  </main>
+
+  <script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "sworn-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sworn — cryptographic receipts for chatbot replies. Workspace root.",
+  "scripts": {
+    "build:sdk": "pnpm --filter @sworn/sdk build",
+    "build:demo": "pnpm --filter demo-chatbot build",
+    "build:verifier": "pnpm --filter verifier-web build",
+    "build": "pnpm -r build",
+    "dev:demo": "pnpm --filter demo-chatbot dev",
+    "dev:verifier": "pnpm --filter verifier-web dev",
+    "test": "pnpm --filter @sworn/sdk test"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=8"
+  }
+}

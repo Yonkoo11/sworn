@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sworn verifier · case 9a4f8d2b…2c3d</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="editorial">
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-glyph"><svg viewBox="0 0 12 12" fill="none"><path d="M3 6l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="brand-name">Sworn</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html">Overview</a>
+        <a href="chatbot.html">Demo bot</a>
+        <a href="index.html" class="cta">Back to showcase →</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section verifier-section" style="border-top: none;">
+      <div class="verifier-frame">
+        <p class="ver-surface-label">Surface B — Public verifier</p>
+        <h2 class="section-h" style="margin-bottom: 56px;">Case file 9a4f8d2b…2c3d</h2>
+
+        <div class="case-file">
+          <p class="cf-label">CASE FILE · sworn://r/</p>
+          <p class="cf-id">9a4f8d2b-1c3e-4f5a-b6d7-8e9f0a1b2c3d</p>
+          <div class="cf-time-pair">
+            <span class="cf-time-rel">Filed 3 seconds ago</span>
+            <span class="cf-time-abs">2026‑05‑13T10:42:08+01:00 UTC</span>
+          </div>
+
+          <div class="banner" role="status">
+            <span class="banner-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12.5l5 5 13-13"/></svg></span>
+            <div class="banner-body">
+              <strong>Verified.</strong>
+              <span>8 of 9 checks passed; 1 skipped (decryption key not supplied). Re-derived in your browser from public sources.</span>
+            </div>
+          </div>
+
+          <div class="independence">
+            <div>
+              <p class="indep-head">This receipt verifies even if Sworn disappears tomorrow.</p>
+              <p class="indep-body">Re-verifiable from public sources alone: 0G Storage gateway, 0G Chain RPC, TEE provider attestation key. Our servers are not in the trust path.</p>
+            </div>
+            <button class="indep-btn" onclick="toggleChain()">Show the chain →</button>
+          </div>
+
+          <div class="chain-show" id="chainShow" hidden>
+            <ol>
+              <li><strong>anchor.exists</strong> ← <code>getAnchor(chatIdHash)</code> on <code>https://evmrpc-testnet.0g.ai</code></li>
+              <li><strong>storage.retrievable</strong> ← <code>GET https://indexer-storage.0g.ai/file?root=0xroot4f…</code></li>
+              <li><strong>body.teeSignature</strong> ← match snapshot pubkey <code>0x04a7…e2c4</code> recorded in receipt body</li>
+              <li><strong>anchor.modelHash</strong> ← keccak256("gemma-3-27b-it") equals on-chain hash</li>
+            </ol>
+          </div>
+
+          <div class="ledger">
+            <h3>Parties</h3>
+            <div class="field">
+              <span class="k">Issuer</span>
+              <span class="v">AcmeRefunds Bot &nbsp; <code>0xf39F…2266</code></span>
+            </div>
+            <div class="field">
+              <span class="k">Provider</span>
+              <span class="v"><code>0x69eB…AE08</code> &nbsp; TeeML mode</span>
+            </div>
+            <div class="field">
+              <span class="k">Model</span>
+              <span class="v">gemma-3-27b-it</span>
+            </div>
+
+            <h3>Anchor &amp; storage</h3>
+            <div class="field">
+              <span class="k">Chain</span>
+              <span class="v">0G Chain · Galileo · chainId 16601</span>
+            </div>
+            <div class="field">
+              <span class="k">Block</span>
+              <span class="v"><a href="#" class="teal">1,247,893</a></span>
+            </div>
+            <div class="field">
+              <span class="k">Anchor tx</span>
+              <span class="v"><a href="#" class="teal"><code>0xtxbc91…d3e8b4a7f2</code></a> &nbsp; → 0G Explorer</span>
+            </div>
+            <div class="field">
+              <span class="k">Storage rootHash</span>
+              <span class="v"><a href="#" class="teal"><code>0xroot4f8d2b1c3e</code></a> &nbsp; → 0G Storage gateway</span>
+            </div>
+            <div class="field">
+              <span class="k">Encryption</span>
+              <span class="v">AES‑256‑CTR · sealed (issuer holds key)</span>
+            </div>
+
+            <h3>Request &amp; response</h3>
+            <div class="field">
+              <span class="k">temperature · topP</span>
+              <span class="v">1.0 · 1.0</span>
+            </div>
+            <div class="field">
+              <span class="k">seed</span>
+              <span class="v muted">Not captured</span>
+            </div>
+            <div class="field">
+              <span class="k">messageCount</span>
+              <span class="v">1</span>
+            </div>
+            <div class="field">
+              <span class="k">tokens</span>
+              <span class="v">18 prompt · 42 completion</span>
+            </div>
+            <div class="field">
+              <span class="k">finishReason</span>
+              <span class="v"><code>stop</code></span>
+            </div>
+          </div>
+
+          <h3 class="checks-h">Verification chain · 9 checks</h3>
+          <ol class="checks-list" style="list-style: none; padding: 0; margin: 0;">
+            <li class="check pass"><span class="glyph">✓</span><span class="name">anchor.exists</span><span class="detail">rootHash=0xroot4f8d… block#1247893</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">storage.retrievable</span><span class="detail">412 B downloaded · rootHash verified</span></li>
+            <li class="check skip"><span class="glyph">·</span><span class="name">storage.decrypts</span><span class="detail">sealed; no decryption key supplied</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">body.parses</span><span class="detail">version=1 chatId=9a4f8d2b…</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">body.promptHash</span><span class="detail">0xd4f8…1a3c</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">body.responseHash</span><span class="detail">0x7e2b…9c4f</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">body.teeSignature</span><span class="detail">sig=0x8c4b… pub=0x04a7…</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">body.processResponseResult</span><span class="detail">true at issuance</span></li>
+            <li class="check pass"><span class="glyph">✓</span><span class="name">anchor.modelHash</span><span class="detail">model=gemma-3-27b-it</span></li>
+          </ol>
+
+          <details class="byte-toggle" open>
+            <summary>
+              <span>Cryptographic detail<span class="toggle-sub">· Level 4 · byte-exact</span></span>
+              <span class="chev">▾</span>
+            </summary>
+            <div class="byte-list">
+              <div class="byte-item">
+                <p class="byte-cap">request.promptHash · sha256</p>
+                <pre class="byte-pre"><span class="dim">// sha256 of canonicalised messages array</span>
+sha256:<span class="acc">d4f8a14b7e02c98f43c1aa6e9b88f0d27c6e4f5a18b27e9d4a1c3eef3211a3c</span></pre>
+              </div>
+              <div class="byte-item">
+                <p class="byte-cap">response.contentHash · sha256</p>
+                <pre class="byte-pre"><span class="dim">// sha256 of completion text</span>
+sha256:<span class="acc">7e2b9f01ac4d18ce67b27d4a9b5e3c08af40d6d3a7e9f23c1ac2049a3b8de9c4f</span></pre>
+              </div>
+              <div class="byte-item">
+                <p class="byte-cap">attestation.teeSignature · Ed25519</p>
+                <pre class="byte-pre"><span class="dim">// raw TEE signature returned with response</span>
+0x8c4b41c2e09ad774a3b51e8f0d44a7b27e9d4c3f1a05b2f3e8c7d9012ab4cd5e6
+f7012387ac9f0ed821b3c6a4b27d5e8f01029384abcdef0123456789ab2f3e1d</pre>
+              </div>
+              <div class="byte-item">
+                <p class="byte-cap">provider.pubkeySnapshot · Ed25519 (snapshot at issuance)</p>
+                <pre class="byte-pre"><span class="dim">// survives provider key rotation</span>
+0x04a7c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91d3e8b4a7f2c91de2c4</pre>
+              </div>
+              <div class="byte-item">
+                <p class="byte-cap">storage.rootHash · 0G Storage Merkle root</p>
+                <pre class="byte-pre">0xroot4f8d2b1c3e  <span class="dim">→ linkified to 0G Storage gateway</span></pre>
+              </div>
+              <div class="byte-item">
+                <p class="byte-cap">anchor.txHash · 0G Chain (Galileo)</p>
+                <pre class="byte-pre">0xtxbc91d3e8b4a7f2  <span class="dim">→ linkified to 0G Explorer</span></pre>
+              </div>
+            </div>
+          </details>
+
+          <footer class="case-foot">
+            <span>Filed by Sworn · v1 schema · 412 B</span>
+            <a href="index.html">Return to overview →</a>
+          </footer>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="chat.js"></script>
+</body>
+</html>
