@@ -1,1 +1,1 @@
-{"root":["./src/main.tsx","./src/components/nav.tsx","./src/lib/mock-receipt.ts","./src/pages/landing.tsx","./src/pages/receiptpage.tsx","./vite.config.ts"],"version":"5.9.3"}
+{"root":["./src/main.tsx","./src/components/nav.tsx","./src/lib/live-verify.ts","./src/lib/mock-receipt.ts","./src/pages/landing.tsx","./src/pages/receiptpage.tsx","./vite.config.ts"],"version":"5.9.3"}

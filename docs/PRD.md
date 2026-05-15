@@ -135,7 +135,7 @@ interface Receipt {
     encryptionScheme?: "AES-256-CTR" | "ECIES";
   };
   anchor: {
-    chainId: number;           // 16601 testnet / 16661 mainnet
+    chainId: number;           // 16602 testnet / 16661 mainnet
     txHash: string;
     blockNumber: number;
     blockTimestamp: number;

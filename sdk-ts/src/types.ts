@@ -60,7 +60,7 @@ export interface Receipt {
     encryptionScheme?: EncryptionScheme;
   };
   anchor: {
-    /** 16601 testnet (Galileo) / 16661 mainnet (Aristotle). */
+    /** 16602 testnet (Galileo) / 16661 mainnet (Aristotle). */
     chainId: number;
     txHash: string;
     blockNumber: number;

@@ -9,7 +9,7 @@
 2. URL returned
 3. Open URL on different machine + wallet → verifier shows green across (anchor event, TEE signature, hash match)
 
-**Min Tech:** TypeScript SDK, `ReceiptRegistry.sol` deployed on Galileo testnet (chain 16601), 0G Compute Gemma 3 27B provider, 0G Storage upload, verifier CLI
+**Min Tech:** TypeScript SDK, `ReceiptRegistry.sol` deployed on Galileo testnet (chain 16602), 0G Compute Gemma 3 27B provider, 0G Storage upload, verifier CLI
 
 **NOT Phase 1:** Dispute escrow contract, browser extension, INFT wrapping, mainnet deploy, Python SDK, image/embedding receipts, multi-provider routing, batch receipts, custom-domain UI polish
 

@@ -34,7 +34,7 @@ See `ai/memory.md`. Do not start Phase 2/3/4 work until Phase 1 binary test pass
 - SDK: TypeScript, `@0gfoundation/0g-compute-ts-sdk`, `@0gfoundation/0g-storage-ts-sdk`, ethers v6
 - Demo chatbot: Next.js 14, React 18
 - Verifier: same SDK + a Vite static page (GitHub Pages)
-- Deploy: GitHub Pages for static; contract on Galileo testnet (chain 16601, RPC `https://evmrpc-testnet.0g.ai`)
+- Deploy: GitHub Pages for static; contract on Galileo testnet (chain 16602, RPC `https://evmrpc-testnet.0g.ai`)
 
 ## Sponsor Depth Targets (ENFORCED per `feedback_hackathon_deep_integration.md`)
 

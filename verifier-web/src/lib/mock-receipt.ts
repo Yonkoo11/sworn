@@ -77,7 +77,7 @@ export function buildMockOutcome(chatId: string): MockOutcome {
       encryptionScheme: skip ? "AES-256-CTR" : undefined,
     },
     anchor: {
-      chainId: 16601,
+      chainId: 16602,
       txHash,
       blockNumber: 1_247_893,
       blockTimestamp: Math.floor(Date.now() / 1000) - 3,
