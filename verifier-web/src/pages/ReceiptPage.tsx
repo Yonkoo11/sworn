@@ -206,11 +206,28 @@ function ReceiptView({
   // end-to-end. For now the live outcome already differs from mock in the
   // anchor.exists check detail, so judges can tell them apart visually.
   void mode;
-  const { receipt, checks, status, passed, total } = outcome;
+  const { receipt: rawReceipt, checks, status, passed, total } = outcome;
+
+  // Normalise the receipt so every downstream access is safe even when the
+  // live path returns a sealed-without-key body (some fields missing).
+  const receipt = useMemo(() => {
+    const r = rawReceipt as any;
+    return {
+      ...r,
+      provider: { address: "", mode: "TeeML", pubkeySnapshot: "", ...(r?.provider ?? {}) },
+      request: { promptHash: "", temperature: 0, topP: 0, messageCount: 0, ...(r?.request ?? {}) },
+      response: { contentHash: "", finishReason: "", promptTokens: 0, completionTokens: 0, ...(r?.response ?? {}) },
+      attestation: { teeSignature: "", processResponseResult: false, ...(r?.attestation ?? {}) },
+      storage: { rootHash: "", encrypted: false, ...(r?.storage ?? {}) },
+      anchor: { chainId: 16602, txHash: "", blockNumber: 0, blockTimestamp: Math.floor(Date.now() / 1000), ...(r?.anchor ?? {}) },
+    };
+  }, [rawReceipt]);
+
   const skipped = checks.filter((c) => c.status === "skip").length;
 
   const filedDate = useMemo(() => {
-    const d = new Date(receipt.anchor.blockTimestamp * 1000);
+    const ts = receipt.anchor.blockTimestamp || Math.floor(Date.now() / 1000);
+    const d = new Date(ts * 1000);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
