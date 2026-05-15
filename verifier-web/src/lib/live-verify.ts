@@ -153,6 +153,8 @@ export async function liveVerify(
         issuer: string;
         blockTimestamp: number;
         modelHash: string;
+        txHash?: string;
+        blockNumber?: number;
       }
     | null = null;
   try {
@@ -175,10 +177,25 @@ export async function liveVerify(
         blockTimestamp: Number(raw[3]),
         modelHash: raw[4],
       };
+      // Best-effort: pull the ReceiptIssued event so we have a txHash for
+      // the Explorer link. Failure here is non-fatal; anchor data is enough.
+      try {
+        const filter = registry.filters.ReceiptIssued(chatIdHash);
+        const logs = await registry.queryFilter(filter, 0, "latest");
+        if (logs.length > 0) {
+          const log: any = logs[0];
+          anchor.txHash = log.transactionHash;
+          anchor.blockNumber = log.blockNumber;
+        }
+      } catch {
+        /* ignore log query failures */
+      }
       checks.push({
         name: "anchor.exists",
         status: "pass",
-        detail: `block@${anchor.blockTimestamp}, issuer=${anchor.issuer.slice(0, 8)}…`,
+        detail: anchor.txHash
+          ? `block#${anchor.blockNumber} tx=${anchor.txHash.slice(0,10)}…`
+          : `block@${anchor.blockTimestamp}, issuer=${anchor.issuer.slice(0, 8)}…`,
       });
     } else {
       checks.push({
@@ -279,6 +296,15 @@ export async function liveVerify(
   if (bodyJson) {
     try {
       body = JSON.parse(bodyJson) as Receipt;
+      // The persisted body is uploaded BEFORE the anchor tx (anchor.txHash /
+      // blockNumber don't exist yet at upload time). Splice in the on-chain
+      // anchor we already read so the downstream renderer has a complete shape.
+      body.anchor = {
+        chainId: cfg.chainId,
+        txHash: anchor.txHash ?? body.anchor?.txHash ?? "",
+        blockNumber: anchor.blockNumber ?? body.anchor?.blockNumber ?? 0,
+        blockTimestamp: anchor.blockTimestamp,
+      };
       checks.push({
         name: "body.parses",
         status: "pass",
@@ -387,6 +413,8 @@ function buildFallbackFromAnchor(
     issuer: string;
     blockTimestamp: number;
     modelHash: string;
+    txHash?: string;
+    blockNumber?: number;
   },
   chainId: number,
 ): Receipt {
@@ -400,7 +428,12 @@ function buildFallbackFromAnchor(
     response: { contentHash: "", finishReason: "", promptTokens: 0, completionTokens: 0 },
     attestation: { teeSignature: "", processResponseResult: true },
     storage: { rootHash: a.storageRootHash, encrypted: true, encryptionScheme: "AES-256-CTR" },
-    anchor: { chainId, txHash: "", blockNumber: 0, blockTimestamp: a.blockTimestamp },
+    anchor: {
+      chainId,
+      txHash: a.txHash ?? "",
+      blockNumber: a.blockNumber ?? 0,
+      blockTimestamp: a.blockTimestamp,
+    },
     issuer: { address: a.issuer },
   };
 }
