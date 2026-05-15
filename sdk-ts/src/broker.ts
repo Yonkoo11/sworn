@@ -10,7 +10,7 @@
  * the verifier flow be exercised offline.
  */
 
-import { createHash, type KeyObject } from "node:crypto";
+import { createHash, createPrivateKey, createPublicKey, type KeyObject } from "node:crypto";
 import type {
   BrokerLike,
   BrokerChatResponse,
@@ -42,7 +42,6 @@ function getMockKeypair(): { privateKey: KeyObject; publicKeyHex: string } {
   const FIXED_PRIVATE_PEM = `-----BEGIN PRIVATE KEY-----
 MC4CAQAwBQYDK2VwBCIEIIVjxBjuKVfHJ0kCK3T7Eh8XFwTglWv/aKLGS3kgnXHa
 -----END PRIVATE KEY-----`;
-  const { createPrivateKey, createPublicKey } = require("node:crypto");
   const privateKey: KeyObject = createPrivateKey(FIXED_PRIVATE_PEM);
   const pub = createPublicKey(privateKey);
   const der = pub.export({ format: "der", type: "spki" }) as Buffer;

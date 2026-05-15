@@ -130,13 +130,29 @@ export class RealStorage implements StorageLike {
       mod: any;
       wallet: any;
     };
-    const { Blob: ZgBlob, Indexer } = mod;
-    const indexer = new Indexer(process.env.SWORN_STORAGE_INDEXER ?? "https://indexer-storage-testnet-turbo.0g.ai");
-    const zgBlob = new ZgBlob(Buffer.from(blob));
-    const [tree] = await zgBlob.merkleTree();
+    // `MemData` is the in-memory variant of AbstractFile in @0glabs/0g-ts-sdk.
+    // `Blob` in this SDK is the WHATWG File-API wrapper and won't accept
+    // a Node Buffer (calls .slice().arrayBuffer() internally). MemData
+    // takes ArrayLike<number>, which Uint8Array satisfies.
+    const { MemData, Indexer } = mod;
+    const indexer = new Indexer(
+      process.env.SWORN_STORAGE_INDEXER ?? "https://indexer-storage-testnet-turbo.0g.ai",
+    );
+    const file = new MemData(blob);
+    const [tree, treeErr] = await file.merkleTree();
+    if (treeErr || !tree) {
+      throw new Error(`0G Storage merkleTree() failed: ${treeErr}`);
+    }
     const rootHash = tree.rootHash();
-    const [tx] = await indexer.upload(zgBlob, process.env.SWORN_STORAGE_RPC ?? "https://evmrpc-testnet.0g.ai", wallet);
-    return { rootHash, storageTxHash: tx ?? "" };
+    const [tx, uploadErr] = await indexer.upload(
+      file,
+      process.env.SWORN_STORAGE_RPC ?? "https://evmrpc-testnet.0g.ai",
+      wallet,
+    );
+    if (uploadErr) {
+      throw new Error(`0G Storage upload failed: ${uploadErr}`);
+    }
+    return { rootHash, storageTxHash: (tx as any)?.hash ?? tx ?? "" };
   }
 
   async download(rootHash: string): Promise<Uint8Array> {

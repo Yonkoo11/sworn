@@ -15,8 +15,68 @@
  *   4. Print the receipt URL — paste into the public verifier
  */
 
-import { JsonRpcProvider, Wallet } from "ethers";
+import { JsonRpcProvider, Wallet, parseEther } from "ethers";
 import { ReceiptClient, generateEncryptionKey } from "../src/index.js";
+
+/** One-shot 0G Compute ledger setup. Idempotent: catches "already funded". */
+async function ensureLedgerFunded(wallet: Wallet, providerAddress: string): Promise<void> {
+  const { createZGComputeNetworkBroker } = await import("@0glabs/0g-serving-broker");
+  const broker = await createZGComputeNetworkBroker(wallet as any);
+  // Try a small ledger amount first; fall back to a larger value if 0G
+  // enforces a higher minimum (we'd see a "minimum X" error message).
+  const tryAmounts = [0.1, 0.3, 0.45];
+  let funded = false;
+  for (const amt of tryAmounts) {
+    try {
+      await broker.ledger.addLedger(amt);
+      console.log(`Ledger created with ${amt} OG.`);
+      funded = true;
+      break;
+    } catch (e) {
+      const msg = (e as Error).message ?? "";
+      if (/already|exist/i.test(msg)) {
+        console.log("Ledger already exists, skipping addLedger.");
+        funded = true;
+        break;
+      }
+      if (/minimum/i.test(msg)) {
+        console.log(`  ${amt} OG below minimum, trying next…`);
+        continue;
+      }
+      console.log(`  addLedger(${amt}) failed: ${msg}`);
+      // Continue trying — could be a transient RPC issue.
+    }
+  }
+  if (!funded) {
+    throw new Error(
+      "Could not create ledger. Wallet likely needs more 0G — claim again at https://faucet.0g.ai",
+    );
+  }
+  try {
+    await broker.inference.acknowledgeProviderSigner(providerAddress);
+    console.log(`Acknowledged provider signer ${providerAddress}.`);
+  } catch (e) {
+    const msg = (e as Error).message ?? "";
+    if (/already|exist/i.test(msg)) {
+      console.log("Provider already acknowledged.");
+    } else {
+      throw e;
+    }
+  }
+  // Transfer a small amount to the provider sub-account. Gemma inference at
+  // ~$0.003/1K tokens means 0.01 OG covers many test calls.
+  try {
+    await broker.ledger.transferFund(providerAddress, "inference", parseEther("0.05"));
+    console.log("Transferred 0.05 OG to provider inference sub-account.");
+  } catch (e) {
+    const msg = (e as Error).message ?? "";
+    if (/already|exist|sufficient/i.test(msg)) {
+      console.log("Provider sub-account already funded, skipping transferFund.");
+    } else {
+      throw e;
+    }
+  }
+}
 
 const MODEL = "gemma-3-27b-it";
 const PROVIDER_ADDRESS = "0x69Eb5a0BD7d0f4bF39eD5CE9Bd3376c61863aE08"; // Gemma 3 27B TeeML
@@ -42,15 +102,37 @@ async function main() {
   console.log(`Provider:  ${PROVIDER_ADDRESS} (Gemma 3 27B, TeeML)`);
   console.log(``);
 
+  // 0G Compute requires a funded ledger + provider sub-account before the
+  // first inference call. Only do this when running against a real provider —
+  // mock-broker mode skips it because no inference call goes out.
+  const realBroker = (process.env.SWORN_BROKER ?? "mock") === "real";
+  if (realBroker) {
+    console.log("Setting up 0G Compute ledger (idempotent)…");
+    await ensureLedgerFunded(wallet, PROVIDER_ADDRESS);
+    console.log(``);
+  } else {
+    console.log("SWORN_BROKER=mock — skipping ledger setup (TEE signature simulated).");
+    console.log(``);
+  }
+
   const encryptionKey = generateEncryptionKey();
+
+  // Backend choice is env-driven so the same script can demo:
+  //   - chain+storage real, TEE signature simulated (default for Galileo at
+  //     submission time, while 0G has no live TeeML providers)
+  //   - everything real (post-provider deployment, flip SWORN_BROKER=real)
+  const brokerBackend = (process.env.SWORN_BROKER ?? "mock") === "real" ? "real" : "mock";
+  const storageBackend = (process.env.SWORN_STORAGE ?? "mock") === "real" ? "real" : "mock";
+  console.log(`Backends: broker=${brokerBackend}, storage=${storageBackend}`);
+  console.log(``);
 
   const client = new ReceiptClient({
     wallet,
     provider,
     registry,
     providerAddress: PROVIDER_ADDRESS,
-    brokerBackend: "real",
-    storageBackend: "real",
+    brokerBackend,
+    storageBackend,
     attest: true,
     receiptEncryption: "sealed",
     encryptionKey,

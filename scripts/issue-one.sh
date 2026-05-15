@@ -23,7 +23,7 @@ if [[ ! -f contracts/.env ]]; then
   exit 1
 fi
 
-if [[ ! -f contracts/deployments/16601.json ]]; then
+if [[ ! -f contracts/deployments/16602.json ]]; then
   echo "ERROR: Registry not deployed yet. Run contracts/deploy-galileo.sh first." >&2
   exit 2
 fi
@@ -40,14 +40,25 @@ if [[ -z "${PRIVATE_KEY:-}" ]]; then
 fi
 
 # Pull the deployed registry address from the deploy artifact (not a secret).
-REGISTRY_ADDRESS=$(python3 -c "import json; print(json.load(open('contracts/deployments/16601.json'))['registry'])")
+REGISTRY_ADDRESS=$(python3 -c "import json; print(json.load(open('contracts/deployments/16602.json'))['registry'])")
 echo "Using ReceiptRegistry at: $REGISTRY_ADDRESS"
 echo "RPC: ${GALILEO_RPC_URL:-https://evmrpc-testnet.0g.ai}"
 echo ""
 
-# Run the SDK's real-mode end-to-end against Galileo.
-export SWORN_BROKER=real
-export SWORN_STORAGE=real
+# Demo-mode for the hackathon submission:
+#   - SWORN_REGISTRY_ADDRESS + SWORN_RPC_URL → recordReceipt fires on Galileo
+#     (chain integration is REAL — txHash visible on chainscan-galileo.0g.ai)
+#   - SWORN_STORAGE=mock   → blob lands in /tmp/sworn-mock-storage and gets
+#     copied into verifier-web/public/blobs so gh-pages serves it. 0G Storage
+#     uploads return a Flow-contract revert on Galileo right now (see
+#     ai/memory.md "Storage gateway 2026-05-15"); fallback path keeps the
+#     verifier end-to-end while that resolves.
+#   - SWORN_BROKER=mock    → local deterministic TEE signature (NO live TeeML
+#     providers on Galileo at submission time; broker.inference.listService()
+#     returns []). Flip SWORN_BROKER=real after 0G ships providers.
+export SWORN_BROKER=mock
+export SWORN_STORAGE=mock
+export SWORN_STORAGE_DIR="${SWORN_STORAGE_DIR:-/tmp/sworn-mock-storage}"
 export SWORN_REGISTRY_ADDRESS="$REGISTRY_ADDRESS"
 export SWORN_RPC_URL="${GALILEO_RPC_URL:-https://evmrpc-testnet.0g.ai}"
 # PRIVATE_KEY already exported via set -a above; the SDK picks it up.
