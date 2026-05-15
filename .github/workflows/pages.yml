@@ -27,6 +27,7 @@ jobs:
       VITE_SWORN_RPC_URL: https://evmrpc-testnet.0g.ai
       VITE_SWORN_REGISTRY_ADDRESS: "0xf35bE6FFEBF91AcC27A78696cf912595C6b08AAA"
       VITE_SWORN_CHAIN_ID: "16602"
+      VITE_SWORN_REVOCATION_ADDRESS: "0xf9e5a9E147856D9B26aB04202D79C2c3dA4a326B"
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
