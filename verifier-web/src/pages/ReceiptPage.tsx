@@ -120,20 +120,30 @@ export function ReceiptPage() {
     (async () => {
       try {
         if (cfg) {
-          const live = await liveVerify(chatId, cfg, decryptKey);
-          if (cancelled) return;
-          // If the anchor exists, we render the live result.
-          const anchorCheck = live?.checks.find((c) => c.name === "anchor.exists");
-          if (live && anchorCheck?.status === "pass") {
-            setOutcome(live);
-            setMode("live");
-            return;
+          try {
+            const live = await liveVerify(chatId, cfg, decryptKey);
+            if (cancelled) return;
+            const anchorCheck = live?.checks.find((c) => c.name === "anchor.exists");
+            if (live && anchorCheck?.status === "pass") {
+              setOutcome(live);
+              setMode("live");
+              return;
+            }
+          } catch (err) {
+            // Live path threw (often an ethers / RPC error). Log and fall through
+            // to the deterministic mock so the page still renders something useful.
+            // eslint-disable-next-line no-console
+            console.warn("liveVerify failed, falling back to mock:", err);
           }
         }
         if (cancelled) return;
         const result = buildMockOutcome(chatId);
         setOutcome(result);
         setMode("mock");
+      } catch (outer) {
+        // Last-resort guard so a thrown error never blanks the page.
+        // eslint-disable-next-line no-console
+        console.error("ReceiptPage useEffect crashed:", outer);
       } finally {
         if (!cancelled) setLoading(false);
       }
