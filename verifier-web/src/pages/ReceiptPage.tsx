@@ -226,13 +226,13 @@ function ReceiptView({
   const skipped = checks.filter((c) => c.status === "skip").length;
 
   const filedDate = useMemo(() => {
-    const ts = receipt.anchor.blockTimestamp || Math.floor(Date.now() / 1000);
+    const ts = (receipt.anchor?.blockTimestamp ?? 0) || Math.floor(Date.now() / 1000);
     const d = new Date(ts * 1000);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  }, [receipt.anchor.blockTimestamp]);
+  }, [(receipt.anchor?.blockTimestamp ?? 0)]);
 
   const banner: BannerState = { status, passed, skipped, total };
   const bcopy = bannerCopy(banner);
@@ -251,8 +251,8 @@ function ReceiptView({
           <p className="cf-label">Case file · sworn://r/</p>
           <h1 className="cf-id">{chatId}</h1>
           <div className="cf-time-pair">
-            <span className="cf-time-rel">Filed {relTime(receipt.anchor.blockTimestamp)}</span>
-            <span className="cf-time-abs">{absTime(receipt.anchor.blockTimestamp)}</span>
+            <span className="cf-time-rel">Filed {relTime((receipt.anchor?.blockTimestamp ?? 0))}</span>
+            <span className="cf-time-abs">{absTime((receipt.anchor?.blockTimestamp ?? 0))}</span>
           </div>
 
           <div className={`banner ${status}`} role="status">
@@ -319,16 +319,16 @@ function ReceiptView({
 
             <h3>Anchor & storage</h3>
             <FieldRow label="Chain">
-              0G Chain · {receipt.anchor.chainId === 16602 ? "Galileo" : "Aristotle"} · chainId {receipt.anchor.chainId}
+              0G Chain · {(receipt.anchor?.chainId ?? 16602) === 16602 ? "Galileo" : "Aristotle"} · chainId {(receipt.anchor?.chainId ?? 16602)}
             </FieldRow>
             <FieldRow label="Block">
-              <a href={`${EXPLORER}${receipt.anchor.txHash}`} target="_blank" rel="noreferrer">
-                {receipt.anchor.blockNumber.toLocaleString()}
+              <a href={`${EXPLORER}${(receipt.anchor?.txHash ?? "")}`} target="_blank" rel="noreferrer">
+                {(receipt.anchor?.blockNumber ?? 0).toLocaleString()}
               </a>
             </FieldRow>
             <FieldRow label="Anchor tx">
-              <a href={`${EXPLORER}${receipt.anchor.txHash}`} target="_blank" rel="noreferrer">
-                <code>{shortHash(receipt.anchor.txHash, 8, 6)}</code>
+              <a href={`${EXPLORER}${(receipt.anchor?.txHash ?? "")}`} target="_blank" rel="noreferrer">
+                <code>{shortHash((receipt.anchor?.txHash ?? ""), 8, 6)}</code>
               </a>{" "}
               · 0G Explorer
             </FieldRow>
@@ -405,8 +405,8 @@ function ReceiptView({
               />
               <ByteBlock
                 caption="anchor.txHash · 0G Chain (Galileo)"
-                value={receipt.anchor.txHash}
-                trailing={`  → ${EXPLORER}${receipt.anchor.txHash}`}
+                value={(receipt.anchor?.txHash ?? "")}
+                trailing={`  → ${EXPLORER}${(receipt.anchor?.txHash ?? "")}`}
               />
             </div>
           </details>
