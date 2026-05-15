@@ -25,7 +25,7 @@ jobs:
       # Live chain wiring - verifier-web reads from Galileo and renders the
       # real on-chain anchor + 0G Storage blob when these are set.
       VITE_SWORN_RPC_URL: https://evmrpc-testnet.0g.ai
-      VITE_SWORN_REGISTRY_ADDRESS: 0xf35bE6FFEBF91AcC27A78696cf912595C6b08AAA
+      VITE_SWORN_REGISTRY_ADDRESS: "0xf35bE6FFEBF91AcC27A78696cf912595C6b08AAA"
       VITE_SWORN_CHAIN_ID: "16602"
     steps:
       - uses: actions/checkout@v4
