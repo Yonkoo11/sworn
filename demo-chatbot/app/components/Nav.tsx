@@ -18,8 +18,15 @@ export function Nav() {
           <span className="brand-name">Sworn</span>
         </a>
         <nav className="nav-links" aria-label="primary">
+          <a href={`${verifierUrl}/spec`}>Spec</a>
+          <a href={`${verifierUrl}/integrate`}>Integrate</a>
           <a href={verifierUrl}>Verifier</a>
-          <a href="https://github.com/yonko/sworn" target="_blank" rel="noreferrer">
+          <a
+            href="https://github.com/Yonkoo11/sworn"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Sworn repository on GitHub"
+          >
             GitHub
           </a>
         </nav>

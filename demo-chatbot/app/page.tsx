@@ -16,7 +16,7 @@ export default function Home() {
       <Nav />
       <main>
         <section className="section-inner">
-          <p className="surface-label">Surface A — Demo bot</p>
+          <p className="surface-label">Demo · every reply produces a receipt</p>
           <h1 className="hero-h">Evidence for what your AI agent said.</h1>
           <p className="hero-lede">
             When a chatbot speaks, it speaks for the company. Sworn issues a notarised,

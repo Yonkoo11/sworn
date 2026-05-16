@@ -10,9 +10,16 @@ const STORAGE_GATEWAY = "https://indexer-storage-testnet-turbo.0g.ai/file/?root=
 function relTime(epochSec: number): string {
   const d = Math.max(1, Math.round(Date.now() / 1000 - epochSec));
   if (d < 60) return `${d} sec ago`;
-  if (d < 3600) return `${Math.round(d / 60)} min ago`;
-  if (d < 86400) return `${Math.round(d / 3600)} hr ago`;
-  return `${Math.round(d / 86400)} days ago`;
+  if (d < 3600) {
+    const n = Math.round(d / 60);
+    return `${n} ${n === 1 ? "min" : "min"} ago`;
+  }
+  if (d < 86400) {
+    const n = Math.round(d / 3600);
+    return `${n} ${n === 1 ? "hr" : "hr"} ago`;
+  }
+  const n = Math.round(d / 86400);
+  return `${n} ${n === 1 ? "day" : "days"} ago`;
 }
 
 function absTime(epochSec: number): string {
@@ -24,6 +31,36 @@ function shortHash(h?: string, head = 6, tail = 4): string {
   if (!h) return "—";
   if (h.length <= head + tail + 2) return h;
   return `${h.slice(0, head + 2)}…${h.slice(-tail)}`;
+}
+
+function CopyLinkButton({ chatId: _chatId }: { chatId: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className={`cf-copy-link ${copied ? "copied" : ""}`}
+      onClick={async () => {
+        try {
+          // Build a shareable URL that drops the decrypt-key (the issuer should
+          // not leak it via clipboard sharing). The detail toggle stays.
+          const url = new URL(window.location.href);
+          url.searchParams.delete("k");
+          await navigator.clipboard.writeText(url.toString());
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1600);
+        } catch {
+          /* clipboard refused (e.g. insecure context); silently no-op */
+        }
+      }}
+      aria-label={copied ? "Receipt URL copied to clipboard" : "Copy receipt URL to clipboard (decrypt key is dropped on copy)"}
+      title={copied ? "Copied. Decrypt key NOT included." : "Copy receipt URL · drops decrypt key"}
+    >
+      <span aria-hidden="true" className="cf-copy-link__icon">
+        {copied ? "✓" : "⎘"}
+      </span>
+      <span className="cf-copy-link__label">{copied ? "Copied" : "Copy link"}</span>
+    </button>
+  );
 }
 
 function CopyButton({ text }: { text: string }) {
@@ -162,7 +199,7 @@ export function ReceiptPage() {
     return (
       <main className="verifier-section">
         <div className="verifier-frame">
-          <p className="ver-surface-label">Surface B — Public verifier</p>
+          <p className="ver-surface-label">Receipt · re-derived in your browser</p>
           <div className="case-file">
             <p className="cf-label">Case file · sworn://r/</p>
             <div className="skeleton skeleton-id" />
@@ -240,7 +277,7 @@ function ReceiptView({
   return (
     <main className="verifier-section">
       <div className="verifier-frame">
-        <p className="ver-surface-label">Surface B — Public verifier</p>
+        <p className="ver-surface-label">Receipt · re-derived in your browser</p>
 
         <article className="case-file" aria-label={`Receipt ${chatId}`}>
           <div className="cf-stamp" aria-hidden="true">
@@ -253,6 +290,7 @@ function ReceiptView({
           <div className="cf-time-pair">
             <span className="cf-time-rel">Filed {relTime((receipt.anchor?.blockTimestamp ?? 0))}</span>
             <span className="cf-time-abs">{absTime((receipt.anchor?.blockTimestamp ?? 0))}</span>
+            <CopyLinkButton chatId={chatId} />
           </div>
 
           <div className={`banner ${status}`} role="status">

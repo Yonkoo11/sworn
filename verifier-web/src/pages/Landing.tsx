@@ -38,7 +38,7 @@ export function Landing() {
 
   return (
     <main className="landing-wrap">
-      <p className="surface-label">Surface B — Public verifier</p>
+      <p className="surface-label">Public verifier · no login, no upload</p>
       <h1 className="landing-h">Re-derive any Sworn receipt from public sources.</h1>
       <p className="landing-lede">
         Paste a chatId or a <code>sworn://r/&lt;id&gt;</code> URL. Your browser will pull
