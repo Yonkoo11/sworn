@@ -1,0 +1,90 @@
+WEBVTT
+NOTE Sworn demo video captions. Time-aligned to the shot list in plan.md.
+NOTE Edit timings during final cut; word-level alignment from Whisper or Loom auto-caption.
+
+00:00.000 --> 00:04.000
+In February 2024, a tribunal ruled an airline's chatbot
+
+00:04.000 --> 00:08.000
+was a corporate statement.
+
+00:08.000 --> 00:11.500
+The airline argued it was a separate entity. The tribunal said no.
+
+00:11.500 --> 00:15.000
+AI mistakes are now uncapped corporate liability — and there is no audit trail.
+
+00:15.000 --> 00:20.000
+Sworn issues a cryptographic receipt under every AI agent reply.
+
+00:20.000 --> 00:25.000
+Anchored on 0G Chain. Persisted on 0G Storage.
+
+00:25.000 --> 00:30.000
+The URL is the receipt. Anyone can verify it.
+
+00:30.000 --> 00:35.000
+No login. No upload. No Sworn server in the trust path.
+
+00:35.000 --> 00:42.000
+Here's a customer service bot built on the Sworn SDK.
+
+00:42.000 --> 00:50.000
+I ask: what is your refund policy for damaged goods?
+
+00:50.000 --> 00:58.000
+Under every reply, a tiny receipt pill appears.
+
+00:58.000 --> 01:05.000
+The chatId on that pill is the dispute primitive.
+
+01:05.000 --> 01:10.000
+Clicking the receipt opens the verifier in your browser.
+
+01:10.000 --> 01:18.000
+Eleven cryptographic checks run locally against the real 0G Chain.
+
+01:18.000 --> 01:25.000
+Anchor exists. Storage retrievable. SHA-256 matches the on-chain root hash.
+
+01:25.000 --> 01:32.000
+Body parses, version 1. Prompt hash. Response hash.
+
+01:32.000 --> 01:42.000
+TEE signature valid against the snapshot public key. Provider not revoked.
+
+01:42.000 --> 01:50.000
+Model hash matches on-chain. All eleven of eleven.
+
+01:50.000 --> 01:55.000
+None of them trust us.
+
+01:55.000 --> 02:02.000
+The anchor lives on 0G Chain block 33,370,770.
+
+02:02.000 --> 02:10.000
+Five contracts back this. If Sworn disappears tomorrow,
+
+02:10.000 --> 02:15.000
+the receipt still verifies from the chain alone.
+
+02:15.000 --> 02:22.000
+Five contracts on Galileo testnet.
+
+02:22.000 --> 02:30.000
+ReceiptRegistry. RevocationRegistry. ReceiptDispute. CommitReveal. SwornReceiptInft.
+
+02:30.000 --> 02:35.000
+0G primitive depth 5 of 5.
+
+02:35.000 --> 02:42.000
+Drop-in TypeScript SDK. Read-only Python verifier.
+
+02:42.000 --> 02:50.000
+Browser extension that highlights any receipt on any page.
+
+02:50.000 --> 02:55.000
+Built for production AI teams, auditors, and insurance underwriters.
+
+02:55.000 --> 03:00.000
+yonkoo11.github.io/sworn

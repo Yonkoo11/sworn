@@ -3,6 +3,8 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import type { VerifyCheck } from "@sworn/sdk";
 import { buildMockOutcome, type MockOutcome } from "../lib/mock-receipt";
 import { getLiveConfig, liveVerify, type LiveOutcome } from "../lib/live-verify";
+import { BackToTop } from "../components/BackToTop";
+import { MintInftButton } from "../components/MintInftButton";
 
 const EXPLORER = "https://chainscan-galileo.0g.ai/tx/";
 const STORAGE_GATEWAY = "https://indexer-storage-testnet-turbo.0g.ai/file/?root=";
@@ -449,11 +451,14 @@ function ReceiptView({
             </div>
           </details>
 
+          <MintInftButton chatIdHash={receipt.chatIdHash ?? ""} />
+
           <footer className="case-foot">
             <span>Filed by Sworn · v1 schema · {412}B</span>
             <Link to="/">Return to landing →</Link>
           </footer>
         </article>
+        <BackToTop />
       </div>
     </main>
   );

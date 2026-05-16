@@ -1,0 +1,50 @@
+# Sworn demo video — voiceover script (TTS-safe, 3:00 hard cap)
+# Format: one line per beat. Brand-name pronunciation rewrites applied.
+# Read at ~165 words per minute; total target 500 words.
+
+[0:00 PROBLEM HOOK]
+In February two thousand twenty four, a tribunal ruled an airline's chatbot was a
+corporate statement. The airline argued it was a separate entity. The tribunal said no.
+What the bot said, the company owed. AI mistakes are now uncapped corporate liability,
+and there is no audit trail.
+
+[0:15 PITCH]
+Sworn issues a cryptographic receipt under every AI agent reply. Anchored on the
+zero gee chain. Persisted on zero gee storage. The U R L is the receipt. Anyone can
+verify it from public sources alone, without trusting any of our servers.
+
+[0:35 DEMO CHATBOT]
+Here's a customer service bot built on the Sworn S D K. I ask: what is your refund
+policy for damaged goods? The bot answers. Under every reply, a tiny receipt pill
+appears. The chat I D on that pill is the dispute primitive.
+
+[1:10 VERIFIER — 11 of 11]
+Clicking the receipt opens the verifier in your own browser. Eleven cryptographic
+checks run locally against the real zero gee chain. Anchor exists. Storage
+retrievable. S H A two fifty six matches the on-chain root hash. Body parses, version
+one. Prompt hash. Response hash. T E E signature valid against the snapshot public
+key. Provider not revoked. Model hash matches on-chain. All eleven of eleven.
+None of them trust us.
+
+[1:55 INDEPENDENCE PROOF]
+Click the transaction hash. The anchor lives on zero gee chain block thirty three
+million three hundred seventy thousand seven seventy. Five contracts back this.
+If Sworn disappears tomorrow, the receipt still verifies from the chain alone and
+the storage gateway. Sworn's servers are not in the trust path.
+
+[2:15 WHAT'S DEPLOYED]
+Five contracts on Galileo testnet. Receipt registry, the anchor. Revocation
+registry, the trust set. Dispute escrow, bond-backed challenge that auto-resolves
+on-chain. Commit reveal, prompt time-binding that kills the issuer-provider
+collusion vector. And a soulbound I N F T wrapping each receipt under the E R C
+seventy eight fifty seven flavour. Zero gee primitive depth five out of five.
+
+[2:35 AUDIENCE]
+Drop-in S D K for TypeScript. Read-only Python verifier for LangChain
+pipelines and FastAPI services. Browser extension that highlights any receipt
+U R L on any webpage with a verify badge. Built for production AI teams, audit
+groups, and the insurance underwriters writing AI errors and omissions policies
+right now.
+
+[2:55 SIGN-OFF]
+(silence — the receipt URL is the closer)
