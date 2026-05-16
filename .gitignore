@@ -4,3 +4,4 @@ sdk-py/dist
 sdk-py/build
 sdk-py/__pycache__
 .pytest_cache
+docs/demo-video/audio/

@@ -11,9 +11,12 @@ Hard cap **3 minutes**. Required deliverable for the 0G APAC Hackathon.
 ## Stack to record this
 
 1. **Screen recorder.** Loom (one-take, auto-caption) is fastest. macOS QuickTime if you want a raw `.mov` to edit elsewhere. 1920×1080. Browser at 110% zoom; cursor enlarged 1.5×.
-2. **Voiceover.**
-   - Option A: record your own voice. Best authenticity. Use a quiet room, USB condenser mic, post-process with iZotope RX or Adobe Podcast's free enhance tool.
-   - Option B: ElevenLabs (or Eleven Reader). Pick a calm voice (Adam, Daniel, or Brian). Feed `voiceover.txt` verbatim — the brand-name rewrites are already applied.
+2. **Voiceover** — run `./generate-voiceover.sh`. It tries three providers in order, first that works wins:
+   - **ElevenLabs** (best quality) — uses `ELEVENLABS_API_KEY` if set. Brian voice, multilingual v2 model. Free tier may be blocked by the abuse detector; Creator tier ($5/mo) reliably works.
+   - **OpenAI TTS** — uses `OPENAI_API_KEY` if set. Onyx voice (deep, authoritative — fits the legal/notarial tone), `tts-1-hd` model. Pay-as-you-go billing required.
+   - **macOS `say` + ffmpeg** (free fallback) — Daniel voice at 170 wpm. Decent for a draft or low-budget submission; not premium.
+   - Output lands at `audio/voiceover.mp3`.
+   - Brand-name pronunciation rewrites are baked into `voiceover.txt` so all three providers say "zero gee" instead of "oh gee", "E R C seventy eight fifty seven" instead of "seven thousand…", etc.
 3. **Edit.** DaVinci Resolve (free) or Descript (caption-first). Cut to the timeline in `plan.md`. Burn `captions.vtt` into the video. Export at H.264 1080p, 8 Mbps target.
 4. **Host.** Loom direct link (primary share) + YouTube unlisted (backup). The Loom thumbnail should be the receipt page with the green "Verified · 11 of 11" banner visible.
 
