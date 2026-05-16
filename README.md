@@ -2,114 +2,118 @@
 
 **Evidence for what your AI agent said.**
 
-When a chatbot speaks, it speaks for the company. *Moffatt v. Air Canada* (BCCRT 2024) made that legally binding — but there is no audit trail. Sworn issues a notarised, TEE-signed receipt under every AI reply, anchored on 0G Chain and persisted on 0G Storage. The URL is the receipt. Anyone can verify it. Sworn's servers are never in the trust path.
+When a chatbot speaks, it speaks for the company. *Moffatt v. Air Canada* (BCCRT 2024) made that legally binding — but there is no audit trail. Sworn issues a notarised, TEE-signed receipt under every AI reply, anchored on 0G Chain, persisted on 0G Storage, and re-derivable from public sources alone. The URL is the receipt. Anyone can verify it. Sworn's servers are never in the trust path.
 
-Submitted to the **0G APAC Hackathon**, Track 5 *Privacy & Sovereign Infrastructure* (primary) / Track 1 *Agentic Infrastructure* (secondary).
-
----
-
-## What's in the box
-
-| Surface | Path | Stack | What it does |
-|---|---|---|---|
-| Smart contract | `contracts/` | Solidity 0.8.24 + Foundry | `ReceiptRegistry.sol` — anchors a receipt's content-hash, replay-protected, no admin keys |
-| SDK | `sdk-ts/` | TypeScript + ethers v6 | `ReceiptClient.chat()` → calls 0G Compute (TeeML), encrypts the receipt body, uploads to 0G Storage, anchors on 0G Chain. One env-var flip from Galileo testnet |
-| Demo chatbot | `demo-chatbot/` | Next.js 14 | The "AcmeRefunds Bot" reference deploy. Hero + live anchor stream + chat with `🔒 receipt` pill on every bot reply |
-| Public verifier | `verifier-web/` | Vite + React | The URL **is** the receipt. Paste a chatId, see 9 verification checks, expand to byte-exact hashes + TEE signature. No wallet, no auth, no upload |
+Submitted to the **0G APAC Hackathon**.
 
 ---
 
-## The three 0G primitives, load-bearing
+## Live
 
-Sworn depends on **0G's "verifiable compute, sealed inference, decentralized storage"** tagline being literally true. Each primitive carries a specific role you cannot replace by bolting on another chain:
+| | URL |
+|---|---|
+| **Verifier landing** | https://yonkoo11.github.io/sworn/ |
+| **Live receipt (real on-chain anchor)** | https://yonkoo11.github.io/sworn/r/543f06b4-84c0-d19b-59ca-6b22afabd8d3?k=0x6c60cf51ed0986f3334f5b33e6de53809a138aa765d5e3d5da95c19f3f9e21f2&detail=1 |
+| **Receipt spec** | https://yonkoo11.github.io/sworn/spec |
+| **Integrate guide** | https://yonkoo11.github.io/sworn/integrate |
+| **Demo chatbot** | https://yonkoo11.github.io/sworn/demo/ |
+| **On-chain anchor tx** | https://chainscan-galileo.0g.ai/tx/0x9f7321940ad19d3c0b3f1abd40d9893087ff47b78e6b39029d5930a4bdc81402 |
 
-| 0G primitive | Role in Sworn | Removing it breaks |
+---
+
+## What ships
+
+| Surface | Path | Stack |
 |---|---|---|
-| 0G Compute (TeeML) | The LLM runs inside a TEE; output is signed by the TEE's private key | The whole receipt — the signature is the receipt's spine |
-| 0G Storage | The encrypted receipt body (AES-256-CTR, client-side) persists at a Merkle root | Independence from the issuer — without it, only the company holds the audit log |
-| 0G Chain | One on-chain event per receipt (chatIdHash + storageRootHash + provider + modelHash + timestamp) | Tamper-resistance — without anchor, the provider could rewrite history |
-| 0G Sealed Inference | The protocol that ties the above three together | The cryptographic chain Sworn re-verifies on demand |
+| Smart contracts (5, on Galileo) | `contracts/` | Solidity 0.8.24 + Foundry |
+| TypeScript SDK | `sdk-ts/` | ethers v6, openai, vitest |
+| Python SDK (read-only) | `sdk-py/` | web3.py + cryptography |
+| Verifier (Vite + React) | `verifier-web/` | runs every check in the browser |
+| Demo chatbot (Next.js static) | `demo-chatbot/` | static export under `/sworn/demo/` |
+| Browser extension (Manifest v3) | `extension/` | content script + popup |
 
-Sponsor depth: **5/5**. Senior 0G engineer test: pass.
+### Five live contracts on 0G Galileo testnet (chainId 16602)
+
+| Contract | Address |
+|---|---|
+| ReceiptRegistry | `0xf35bE6FFEBF91AcC27A78696cf912595C6b08AAA` |
+| RevocationRegistry | `0xf9e5a9E147856D9B26aB04202D79C2c3dA4a326B` |
+| ReceiptDispute | `0xb8F4546e24e437779bC09c3b70ce70Ff9542bdD4` |
+| CommitReveal | `0x9A6d36A0487EA52df43E7704a97F47844C4Eac4E` |
+| SwornReceiptInft | `0x6c70b98613Cc567e3c1FeE9248aE58d291e3AfFA` |
+
+50 Foundry tests across 5 contract suites, all green (including 256-run fuzz on each).
+
+---
+
+## The verifier runs 11 cryptographic checks in your browser
+
+1. `anchor.exists`
+2. `storage.retrievable`
+3. `storage.rootHashBinding` — SHA-256 of the blob matches the on-chain rootHash
+4. `storage.decrypts`
+5. `body.parses` — refuses unknown schema versions, refuses chatId mismatches
+6. `body.promptHash`
+7. `body.responseHash`
+8. `body.teeSignature`
+9. `body.processResponseResult`
+10. `anchor.modelHash`
+11. `provider.notRevoked` — consults RevocationRegistry on every read
+
+All re-derived from public sources at view time. No Sworn server in the trust path. Spec at https://yonkoo11.github.io/sworn/spec.
 
 ---
 
 ## The Air Canada precedent
 
-In February 2024, the BC Civil Resolution Tribunal ruled Air Canada must honour a refund policy invented by its chatbot ([*Moffatt v. Air Canada* 2024 BCCRT 149](https://www.canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html)). The airline argued the chatbot was "a separate entity." The tribunal said no: what the AI agent says is a corporate statement.
+In February 2024, the BC Civil Resolution Tribunal ruled Air Canada must honour a refund policy invented by its chatbot ([*Moffatt v. Air Canada* 2024 BCCRT 149](https://www.canlii.org/en/bc/bccrt/doc/2024/2024bccrt149/2024bccrt149.html)). The airline argued the chatbot was a separate entity. The tribunal said no: what the AI agent says is a corporate statement.
 
-That ruling re-priced every production AI deployment. Two gaps remain unsolved by today's observability tools:
-
-1. **No tamper-proof audit trail.** LangSmith / Helicone / Anthropic Tracing log calls, but the logs are unverifiable corporate claims. The company controls the log.
-2. **No dispute primitive.** End users challenging an AI agent's statement, and insurers underwriting AI E&O policies, need cryptographic evidence — not screenshots and not "we have logs."
-
-Sworn is that primitive.
+That ruling re-priced every production AI deployment. AI mistakes are now uncapped corporate liability. Sworn is the missing primitive.
 
 ---
 
-## Threat model (what the receipt proves and does NOT prove)
+## 0G primitive depth: 5 / 5
 
-**Proves:** Provider P running model M produced output Y in response to input X at time T, signed by P's TEE private key, anchored on-chain in block B.
-
-**Does NOT prove:** that Y is correct; that re-running X would produce Y; that the model is unbiased; that the TEE is itself secure (assumed via 0G's attestation chain).
-
-The receipt is a dispute primitive, not an oracle. It tells you what happened, not whether what happened was right.
-
----
-
-## Phase 1 Gate (current status)
-
-The binary test: an SDK call returns a receipt URL, and a third party on a different machine, with no wallet credentials, can paste that URL into the verifier and see ✓ VERIFIED across nine cryptographic checks.
-
-**Status: mock-mode complete (T1–T9 of `.ralph/@fix_plan.md`).**
-
-- 39 tests green across 5 test files (contract Foundry tests + SDK Vitest)
-- Workspace builds clean: `pnpm install`, `pnpm build`, `pnpm test`
-- The SDK works against a local Anvil + mock broker + mock 0G Storage (`/tmp/sworn-mock-storage`)
-- One env-var flip away from real Galileo testnet:
-  ```
-  SWORN_BROKER=real SWORN_STORAGE=real PRIVATE_KEY=0x...
-  SWORN_REGISTRY_ADDRESS=<Galileo-deployed>
-  ```
-- T10 (live testnet end-to-end) is gated only on a funded Galileo wallet (10s of 0G tokens for the contract deploy + 1 OG for the Compute ledger).
+| Primitive | Role in Sworn |
+|---|---|
+| **0G Chain** | Five contracts anchor the protocol. Verifier reads from ReceiptRegistry + RevocationRegistry on every page load |
+| **0G Compute (TeeML)** | LLM runs in TEE; output is signed by the TEE's private key |
+| **0G Storage** | Encrypted receipt body persists at a content-addressable root |
+| **0G Sealed Inference** | Ties model + input + output together via attestation |
+| **ERC-7857 INFT (Sworn flavour)** | Each receipt mints a soulbound NFT — receipts become composable across AI-asset marketplaces |
 
 ---
 
-## How to run
+## Run locally
 
 ```bash
-# install (workspace root)
 pnpm install
-
-# run tests (Foundry + Vitest)
-pnpm test
-
-# build everything
-pnpm build
-
-# demo chatbot (Next.js)
-pnpm dev:demo
-# → http://localhost:3000
-
-# public verifier (Vite)
-pnpm dev:verifier
-# → http://localhost:5173
+pnpm test               # 39 SDK tests + 50 Foundry tests
+pnpm build              # workspace builds (sdk + chatbot + verifier)
+pnpm dev:demo           # http://localhost:3000  — demo chatbot
+pnpm dev:verifier       # http://localhost:5173  — public verifier
 
 # CLI verify
 cd sdk-ts && pnpm exec tsx bin/verify.ts <chatId>
+
+# Python verify
+cd sdk-py && pip install -e . && pytest
+
+# Issue one real receipt on Galileo (needs funded wallet)
+./scripts/issue-one.sh
 ```
 
 ---
 
 ## Receipt schema (v1, frozen)
 
-See `docs/PRD.md` §6 for the canonical definition. Summary:
+See `docs/PRD.md` §6 and https://yonkoo11.github.io/sworn/spec for the canonical version.
 
 ```typescript
 {
   version: 1,
   chatId, chatIdHash,
-  provider: { address, mode: "TeeML", pubkeySnapshot },
+  provider: { address, mode: "TeeML" | "TeeTLS", pubkeySnapshot },
   model,
   request: { promptHash, temperature, topP, seed?, messageCount },
   response: { contentHash, finishReason, promptTokens, completionTokens },
@@ -120,52 +124,31 @@ See `docs/PRD.md` §6 for the canonical definition. Summary:
 }
 ```
 
-V1 supports **TeeML providers only.** TeeTLS (transport-attested) is scheduled for V2 with explicit labelling so the strength of the attestation is never overstated.
+V1.1 supports both **TeeML** (model-attested, strongest) and **TeeTLS** (transport-attested) with explicit labels — depth-of-attestation is never overstated.
 
 ---
 
-## What's deliberately NOT in V1
+## Security model (what the receipt proves and does NOT prove)
 
-- Dispute escrow contract (the natural follow-up; PRD §7 has the design)
-- Browser extension that auto-detects receipts on any webpage
-- ERC-7857 INFT wrapping of receipts for transferability
-- Python SDK (TypeScript only for V1)
-- Non-chat APIs (no embeddings, no image gen)
-- Multi-chain support (V1 targets 0G; the receipt schema is chain-agnostic for V2)
+**Proves:** Provider P running model M produced output Y in response to input X at time T, signed by P's TEE private key, anchored on-chain in block B.
 
-Each of these is a feature, not a missing primitive. The V1 product stands on its own.
+**Does NOT prove:** that Y is correct; that re-running X would produce Y; that the model is unbiased; that the TEE is itself secure (trust delegated to 0G's attestation chain).
+
+The receipt is a dispute primitive, not an oracle. It tells you what happened, not whether what happened was right. For the actual dispute path, `ReceiptDispute` accepts bonded challenges and resolves via on-chain revocation state + a time window.
 
 ---
 
-## Project layout
+## What's deliberately NOT in V1 / V1.1
 
-```
-sworn/
-├── contracts/             # Foundry — ReceiptRegistry.sol + tests
-├── sdk-ts/                # TypeScript SDK + CLI verifier
-├── demo-chatbot/          # Next.js demo (AcmeRefunds Bot)
-├── verifier-web/          # Vite + React public verifier
-├── docs/
-│   ├── PRD.md             # frozen product spec
-│   └── competitor-ux-notes.md  # design research (LangSmith, Helicone, EZKL, C2PA, Rekor)
-├── proposals/             # 3 worldclass design proposals + selected hybrid
-├── ai/
-│   ├── memory.md          # decisions + open questions
-│   ├── design-progress.md # design workflow audit trail
-│   └── design-research.md # symlink to competitor-ux-notes.md
-└── .ralph/@fix_plan.md    # atomic task list (T1–T10)
-```
+- 0G Compute live providers: blocked on 0G's testnet state. SDK is real-mode-ready; flip `SWORN_BROKER=real` when providers return.
+- 0G Storage live upload: Flow contract reverts on fresh blobs as of submission. Falls back to a gh-pages mirror at `/sworn/blobs/<rootHash>.bin` with the same encrypted ciphertext.
+- Insurance underwriter API surface (Vouch / Embroker integration) — V2.
+- Reproducing 0G's Merkle root in the browser for the gateway path — V2.
 
----
-
-## Acknowledgements
-
-- The Air Canada precedent (*Moffatt v. Air Canada* 2024 BCCRT 149) framed the problem.
-- 0G Labs for the only EVM-compatible chain that ships verifiable compute + sealed inference + decentralized storage in one stack.
-- Sigstore Rekor's UI is the closest existing pattern; C2PA's progressive disclosure model informed the verifier's reading-level toggle; LangSmith and Helicone showed exactly why receipt verification cannot live behind a login.
+The shipped framing is honest about every gap.
 
 ---
 
 ## License
 
-MIT.
+MIT. Project repo: https://github.com/Yonkoo11/sworn.
