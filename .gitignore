@@ -1,0 +1,6 @@
+sdk-py/.venv
+sdk-py/*.egg-info
+sdk-py/dist
+sdk-py/build
+sdk-py/__pycache__
+.pytest_cache

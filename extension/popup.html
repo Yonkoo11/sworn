@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sworn — verify a receipt</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="ph">
+      <span class="ph-glyph" aria-hidden="true">✓</span>
+      <span class="ph-name">Sworn</span>
+      <span class="ph-sub">cryptographic AI receipts</span>
+    </header>
+    <main class="pmain">
+      <p class="pmuted">Paste a chatId or <code>sworn://r/&lt;id&gt;</code> URL to verify.</p>
+      <form id="pf">
+        <input id="pin" type="text" autocomplete="off" placeholder="chatId or sworn://r/…" />
+        <button id="psubmit" type="submit">Verify →</button>
+      </form>
+      <p class="pmuted small">
+        Tip: any receipt URL on a webpage is auto-highlighted with a verify badge.
+      </p>
+      <p class="pmuted small">
+        <a href="https://yonkoo11.github.io/sworn/spec" target="_blank" rel="noreferrer">Receipt spec</a> ·
+        <a href="https://github.com/Yonkoo11/sworn" target="_blank" rel="noreferrer">Source</a>
+      </p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

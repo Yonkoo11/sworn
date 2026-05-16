@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/sworn_verify/__init__.py
+src/sworn_verify/verifier.py
+src/sworn_verify.egg-info/PKG-INFO
+src/sworn_verify.egg-info/SOURCES.txt
+src/sworn_verify.egg-info/dependency_links.txt
+src/sworn_verify.egg-info/requires.txt
+src/sworn_verify.egg-info/top_level.txt
+tests/test_verifier.py

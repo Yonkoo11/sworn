@@ -1,0 +1,55 @@
+/* Sworn receipt badge — injected by the extension on any page. Visually
+   distinct without being garish. Matches the verifier's teal accent. */
+.sworn-receipt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 6px;
+  margin: 0 2px;
+  background: linear-gradient(180deg, #e8f2f0 0%, #d6e7e4 100%);
+  border: 1px solid #0b5754;
+  border-radius: 999px;
+  color: #0b5754 !important;
+  text-decoration: none !important;
+  font: 500 12px/1.2 "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 1px 2px rgba(11, 87, 84, 0.08);
+  vertical-align: baseline;
+}
+.sworn-receipt-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(11, 87, 84, 0.16);
+}
+.sworn-receipt-badge:active {
+  transform: scale(0.97);
+  transition: transform 80ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.sworn-receipt-badge__lock {
+  font-size: 10px;
+  line-height: 1;
+  filter: saturate(0.6);
+}
+.sworn-receipt-badge__label {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.sworn-receipt-badge__id {
+  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  font-size: 11px;
+  color: #14807c;
+}
+.sworn-receipt-badge__arrow {
+  font-size: 11px;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sworn-receipt-badge,
+  .sworn-receipt-badge:hover,
+  .sworn-receipt-badge:active { transition: none !important; transform: none !important; }
+}

@@ -40,14 +40,20 @@ const DEFAULT_TEMPERATURE = 1.0;
 const DEFAULT_TOP_P = 1.0;
 
 /**
- * Reject TeeTLS at the SDK boundary per PRD §11 + CLAUDE.md "TeeML only in V1".
- * Even mock-mode is V1 — the test backend must not let TeeTLS pass.
+ * Validate the declared provider mode. V1.1 supports both modes, labelled
+ * differently in the receipt so a verifier never overstates the attestation
+ * strength:
+ *   - TeeML   = "model-attested" (TEE runs the model; signed output binds to
+ *                inputs cryptographically — strongest)
+ *   - TeeTLS  = "transport-attested" (TEE proxies an upstream provider's
+ *                response over TLS; binds the transport, not the model —
+ *                weaker, but still useful for the ~half of 0G's provider menu)
+ * Unknown modes are rejected at the SDK boundary.
  */
-function assertTeeMLMode(mode: ProviderMode): void {
-  if (mode !== "TeeML") {
+function assertValidProviderMode(mode: ProviderMode): void {
+  if (mode !== "TeeML" && mode !== "TeeTLS") {
     throw new Error(
-      `Sworn V1 only supports TeeML providers. Received mode="${mode}". ` +
-        `TeeTLS support is scheduled for V2 (see docs/PRD.md §11).`,
+      `Unknown provider.mode="${mode}". Sworn supports TeeML | TeeTLS.`,
     );
   }
 }
@@ -150,7 +156,7 @@ export class ReceiptClient {
       chatIdHash: raw.chatIdHash,
       provider: {
         address: this.opts.providerAddress,
-        mode: "TeeML",
+        mode: this.opts.providerMode ?? "TeeML",
         pubkeySnapshot: raw.pubkeySnapshot,
       },
       model: raw.model,
@@ -273,9 +279,9 @@ export class ReceiptClient {
     if (!opts.model) {
       throw new Error("chat: model is required");
     }
-    // TeeML-only gate. The SDK doesn't accept a `mode` param yet (TeeML is
-    // implicit), so this is the place to reject any future TeeTLS leak.
-    assertTeeMLMode("TeeML");
+    // Validate the declared mode (TeeML | TeeTLS). Receipts carry the mode
+    // verbatim so a verifier can label the attestation tier honestly.
+    assertValidProviderMode(this.opts.providerMode ?? "TeeML");
 
     const temperature = opts.temperature ?? DEFAULT_TEMPERATURE;
     const topP = opts.topP ?? DEFAULT_TOP_P;

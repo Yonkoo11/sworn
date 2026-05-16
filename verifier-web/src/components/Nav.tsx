@@ -20,8 +20,10 @@ export function Nav() {
           <span className="brand-name">Sworn</span>
         </Link>
         <nav className="nav-links" aria-label="primary">
+          <Link to="/spec">Spec</Link>
+          <Link to="/integrate">Integrate</Link>
           <a href={demoUrl}>Demo bot</a>
-          <a href="https://github.com/yonko/sworn" target="_blank" rel="noreferrer">
+          <a href="https://github.com/Yonkoo11/sworn" target="_blank" rel="noreferrer">
             GitHub
           </a>
         </nav>

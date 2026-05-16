@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Sworn — verify AI agent receipts",
+  "version": "0.1.0",
+  "description": "Highlights and verifies Sworn receipt URLs on any page. Cryptographic audit trail for AI agent replies, anchored on 0G Chain.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": [
+    "https://yonkoo11.github.io/sworn/*",
+    "https://chainscan-galileo.0g.ai/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.svg",
+      "48": "icons/icon-48.svg",
+      "128": "icons/icon-128.svg"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.svg",
+    "48": "icons/icon-48.svg",
+    "128": "icons/icon-128.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  }
+}

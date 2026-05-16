@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sworn-verify"
+version = "0.1.0"
+description = "Verify Sworn receipts (AI agent cryptographic audit trail) from Python."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "yonkoo11" }]
+keywords = ["ai", "audit", "receipt", "0g", "tee", "ai-agent"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Security :: Cryptography",
+]
+dependencies = [
+  "web3>=6.20",
+  "eth-abi>=5.1",
+  "eth-utils>=4.1",
+  "requests>=2.31",
+  "cryptography>=42.0",
+]
+
+[project.urls]
+Repository = "https://github.com/Yonkoo11/sworn"
+Spec = "https://yonkoo11.github.io/sworn/spec"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"

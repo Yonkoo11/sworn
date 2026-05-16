@@ -105,8 +105,15 @@ export interface ReceiptClientOptions {
   provider?: JsonRpcProvider;
   /** Deployed ReceiptRegistry address. */
   registry: string;
-  /** TeeML provider address (e.g. Gemma 3 27B). */
+  /** TeeML or TeeTLS provider address (e.g. Gemma 3 27B). */
   providerAddress: string;
+  /**
+   * Attestation tier of the provider. "TeeML" (default) means the TEE runs
+   * the model itself; "TeeTLS" means the TEE proxies an upstream provider
+   * over TLS (weaker, transport-only). The verifier renders both with
+   * different labels.
+   */
+  providerMode?: ProviderMode;
   /** Emit receipts by default. Can be overridden per-call. */
   attest?: boolean;
   /** "sealed" (default, encrypted) or "public" (plaintext blob). */
